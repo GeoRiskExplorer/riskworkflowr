@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+outputs/
+data-raw/gdb/*.gdb/
+config/project_paths.yml
+*.qs2
+*.duckdb
+*.gpkg
