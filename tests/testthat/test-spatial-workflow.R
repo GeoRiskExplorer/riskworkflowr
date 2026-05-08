@@ -103,3 +103,45 @@ test_that("geom_repair returns sf object", {
   expect_equal(nrow(result), nrow(test_polygons))
 
 })
+
+# 00008 — Test risk_build_counts() ------------------------------------------
+
+test_that("risk_build_counts builds counts and joins them to units", {
+
+  result <- risk_build_counts(
+    points = test_points,
+    units = test_polygons,
+    unit_id_col = "unit_id",
+    join_mode = "nearest"
+  )
+
+  expect_true(inherits(result, "sf"))
+  expect_equal(nrow(result), 2)
+  expect_true("unit_id" %in% names(result))
+  expect_true("event_count" %in% names(result))
+
+  expect_equal(sum(result$event_count), 3)
+
+})
+
+# 00009 — Test risk_join_counts() -------------------------------------------
+
+test_that("risk_join_counts joins counts back to units", {
+
+  counts <- data.frame(
+    unit_id = c("A", "B"),
+    event_count = c(2, 1)
+  )
+
+  result <- risk_join_counts(
+    units = test_polygons,
+    counts = counts,
+    unit_id_col = "unit_id"
+  )
+
+  expect_true(inherits(result, "sf"))
+  expect_equal(nrow(result), 2)
+  expect_true("event_count" %in% names(result))
+  expect_equal(sum(result$event_count), 3)
+
+})
