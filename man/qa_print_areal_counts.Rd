@@ -17,3 +17,4 @@ Invisibly returns NULL.
 \description{
 Prints a simple console summary of event counts and unit coverage.
 }
+\keyword{internal}

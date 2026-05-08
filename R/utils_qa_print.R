@@ -10,6 +10,8 @@
 #' @param count_col Name of count column.
 #'
 #' @return Invisibly returns NULL.
+#'
+#' @keywords internal
 
 qa_print_areal_counts <- function(units, count_col = "event_count") {
 

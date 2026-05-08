@@ -1,4 +1,66 @@
-url: ~
+url: https://GeoRiskExplorer.github.io/riskworkflowr/
+
 template:
   bootstrap: 5
 
+home:
+  title: "riskworkflowr"
+  description: >
+    Reproducible spatial risk analysis workflows for areal units
+    and H3 hexagonal grids.
+
+navbar:
+  structure:
+    left:
+      - intro
+      - articles
+      - reference
+    right:
+      - github
+
+reference:
+  - title: "Spatial Workflow"
+    contents:
+      - sj_join
+      - geom_repair
+      - risk_count_units
+      - risk_join_counts
+      - risk_build_counts
+
+  - title: "Risk Metrics"
+    contents:
+      - risk_calc_rate
+      - risk_calc_poisson_probability
+      - risk_calc_smr
+      - risk_calc_location_quotient
+
+  - title: "Mapping"
+    contents:
+      - map_risk_choropleth
+
+  - title: "Example Datasets"
+    contents:
+      - example_lga_analysis
+      - example_hex_analysis
+
+articles:
+  - title: "Getting Started"
+    navbar: ~
+    contents:
+      - getting-started
+
+  - title: "Core Workflows"
+    contents:
+      - spatial-assignment
+      - counts-and-aggregation
+      - risk-metrics
+      - smr-analysis
+
+  - title: "Advanced Workflows"
+    contents:
+      - h3-and-hex-workflows
+      - risk-mapping
+
+  - title: "Concepts"
+    contents:
+      - package-philosophy
