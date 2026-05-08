@@ -16,3 +16,7 @@ dev/setup/01_set_project_paths.R
 *.gdb/
 *.gdb
 # R/session files
+inst/doc
+/doc/
+/Meta/
+docs

@@ -1,0 +1,19 @@
+---
+title: "risk-mapping"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{risk-mapping}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(riskworkflowr)
+```

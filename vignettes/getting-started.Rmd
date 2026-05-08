@@ -1,0 +1,98 @@
+---
+title: "Getting Started with riskworkflowr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{getting-started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+## Overview
+
+`riskworkflowr` provides reproducible workflows for spatial risk analysis, including:
+
+- spatial assignment
+- event aggregation
+- risk metrics
+- SMR analysis
+- cartographic outputs
+
+The package is designed to support consistent workflows across:
+
+- administrative boundaries
+- custom areal units
+- H3 hexagonal grids
+
+## Core workflow
+
+```text
+point events
+→ spatial assignment
+→ aggregation/counts
+→ risk metrics
+→ mapping
+```
+
+## Install package
+
+```{r eval=FALSE}
+pak::pak("GeoRiskExplorer/riskworkflowr")
+```
+
+## Load package
+
+```{r}
+library(riskworkflowr)
+```
+
+## Create example data
+
+```{r}
+data <- data.frame(
+  event_count = c(5, 10, 15),
+  population = c(1000, 2000, 3000)
+)
+```
+
+## Calculate rates
+
+```{r}
+risk_calc_rate(
+  data = data,
+  count_col = "event_count",
+  denominator_col = "population"
+)
+```
+
+## Calculate SMR
+
+```{r}
+risk_calc_smr(
+  data = data,
+  observed_col = "event_count",
+  denominator_col = "population"
+)
+```
+
+## Important assumptions
+
+This package implements practical and reproducible spatial risk workflows commonly used in operational and applied analytical contexts.
+
+Alternative epidemiological and spatial statistical approaches may be more appropriate depending on:
+
+- data availability
+- denominator quality
+- covariate availability
+- inferential objectives
+- spatial scale
+- analytical assumptions
+
+## Next steps
+
+Additional vignettes provide detail on:
+
+- spatial assignment
+- aggregation workflows
+- SMR analysis
+- H3 workflows
+- mapping
+- methodological considerations
