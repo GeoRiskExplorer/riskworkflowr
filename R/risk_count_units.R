@@ -2,6 +2,30 @@
 # risk_count_units.R
 # Purpose: Count events/records by analysis unit
 
+
+#' Count events within spatial units
+#'
+#' Aggregates point event counts by polygon or hexagonal units.
+#'
+#' Intended for risk analysis workflows where events are assigned
+#' to administrative areas, statistical regions, or grid systems.
+#'
+#' @param joined_points An sf object of joined point features.
+#' @param unit_id_col Column containing unit identifiers.
+#' @param count_col Name of output count column.
+#'
+#' @return A data frame containing event counts by unit.
+#'
+#' @examples
+#' \dontrun{
+#' counts <- risk_count_units(
+#'   joined_points = joined_sf,
+#'   unit_id_col = "hex_id"
+#' )
+#' }
+#'
+#' @export
+
 risk_count_units <- function(
   data,
   unit_id_col,

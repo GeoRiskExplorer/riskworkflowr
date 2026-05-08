@@ -1,5 +1,28 @@
-# 1 ------------------------------------------------------------------------
+# 01
 # Repair invalid sf geometry
+
+#' Repair and normalise geometry for processing
+#'
+#' Repairs invalid geometries and optionally standardises geometry
+#' structure for downstream spatial processing workflows.
+#'
+#' This function is intended to support reliable spatial operations
+#' across sf, GEOS, DuckDB, and ArcGIS-derived workflows where
+#' geometry validity or structure differences may affect processing.
+#'
+#' @param data An sf object.
+#' @param make_valid Logical; if TRUE, apply `sf::st_make_valid()`.
+#' @param drop_zm Logical; if TRUE, remove Z and M dimensions.
+#' @param quiet Logical; if TRUE, suppress QA messages.
+#'
+#' @return An sf object with repaired/normalised geometry.
+#'
+#' @examples
+#' \dontrun{
+#' repaired_sf <- geom_repair(my_sf)
+#' }
+#'
+#' @export
 
 geom_repair <- function(x, quiet = FALSE) {
 
