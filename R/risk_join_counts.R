@@ -2,6 +2,23 @@
 # risk_join_counts.R
 # Purpose: Join event/count table back to areal unit polygons
 
+#' Join event counts back to spatial units
+#'
+#' Joins a count table back to polygon or hexbin units and optionally replaces
+#' missing count values with a chosen value, usually zero.
+#'
+#' @param units An sf object containing polygon or hexbin units.
+#' @param counts A data frame containing counts by unit.
+#' @param unit_id_col Name of the shared unit identifier column.
+#' @param unit_name_col Optional shared unit name column.
+#' @param count_col Name of the count column.
+#' @param missing_count_value Value used to replace missing counts. Use `NULL`
+#'   to preserve missing values.
+#'
+#' @return An sf object with counts joined to the input units.
+#'
+#' @export
+
 risk_join_counts <- function(
   units,
   counts,

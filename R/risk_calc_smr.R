@@ -2,6 +2,37 @@
 # risk_calc_smr.R
 # Purpose: Calculate SMR / relative risk with optional exact Poisson CI
 
+#' Calculate Standardised Mortality Ratio (SMR)
+#'
+#' Calculates expected counts and Standardised Mortality Ratios (SMR) using a
+#' global reference rate derived from the input dataset.
+#'
+#' Optional confidence intervals are calculated using Poisson-based methods,
+#' appropriate for rare-event and small-area analysis.
+#'
+#' @param data A data frame or sf object.
+#' @param observed_col Name of observed event count column.
+#' @param denominator_col Name of denominator, population, or exposure column.
+#' @param expected_col Name of expected count output column.
+#' @param smr_col Name of SMR output column.
+#' @param global_rate_col Name of global reference rate output column.
+#' @param ci_method Confidence interval method. Currently supports `"exact"`.
+#' @param conf_level Confidence level for intervals.
+#' @param smr_lower_col Name of lower confidence interval column.
+#' @param smr_upper_col Name of upper confidence interval column.
+#' @param smr_ci_flag_col Name of SMR interpretation/classification column.
+#' @param zero_expected_value Value returned when expected count is missing,
+#'   zero, or negative.
+#'
+#' @return Input data with expected counts, SMR values, and optional confidence
+#' intervals added.
+#'
+#' @references
+#' Poisson confidence interval approaches commonly used in epidemiological
+#' small-area and rare-event analysis.
+#'
+#' @export
+
 risk_calc_smr <- function(
   data,
   observed_col = "event_count",

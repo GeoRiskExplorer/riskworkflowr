@@ -13,27 +13,34 @@ risk_count_units(
 )
 }
 \arguments{
-\item{unit_id_col}{Column containing unit identifiers.}
+\item{data}{A data frame or sf object containing joined event records.}
 
-\item{count_col}{Name of output count column.}
+\item{unit_id_col}{Name of the unit identifier column.}
 
-\item{joined_points}{An sf object of joined point features.}
+\item{unit_name_col}{Optional name of the unit name column.}
+
+\item{count_col}{Name of the output count column.}
+
+\item{drop_geometry}{Logical; if TRUE and \code{data} is an sf object, geometry is
+dropped before counting.}
 }
 \value{
 A data frame containing event counts by unit.
 }
 \description{
-Aggregates point event counts by polygon or hexagonal units.
+Aggregates assigned event records by polygon, hexbin, or other spatial unit.
 }
 \details{
-Intended for risk analysis workflows where events are assigned
-to administrative areas, statistical regions, or grid systems.
+This function is intended for risk analysis workflows where events have
+already been assigned to administrative areas, statistical regions, sites,
+or grid systems using a spatial join workflow such as \code{\link[=sj_join]{sj_join()}}.
 }
 \examples{
 \dontrun{
 counts <- risk_count_units(
-  joined_points = joined_sf,
-  unit_id_col = "hex_id"
+  data = joined_sf,
+  unit_id_col = "hex_id",
+  count_col = "event_count"
 )
 }
 

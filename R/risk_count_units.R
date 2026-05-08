@@ -5,27 +5,31 @@
 
 #' Count events within spatial units
 #'
-#' Aggregates point event counts by polygon or hexagonal units.
+#' Aggregates assigned event records by polygon, hexbin, or other spatial unit.
 #'
-#' Intended for risk analysis workflows where events are assigned
-#' to administrative areas, statistical regions, or grid systems.
+#' This function is intended for risk analysis workflows where events have
+#' already been assigned to administrative areas, statistical regions, sites,
+#' or grid systems using a spatial join workflow such as [sj_join()].
 #'
-#' @param joined_points An sf object of joined point features.
-#' @param unit_id_col Column containing unit identifiers.
-#' @param count_col Name of output count column.
+#' @param data A data frame or sf object containing joined event records.
+#' @param unit_id_col Name of the unit identifier column.
+#' @param unit_name_col Optional name of the unit name column.
+#' @param count_col Name of the output count column.
+#' @param drop_geometry Logical; if TRUE and `data` is an sf object, geometry is
+#'   dropped before counting.
 #'
 #' @return A data frame containing event counts by unit.
 #'
 #' @examples
 #' \dontrun{
 #' counts <- risk_count_units(
-#'   joined_points = joined_sf,
-#'   unit_id_col = "hex_id"
+#'   data = joined_sf,
+#'   unit_id_col = "hex_id",
+#'   count_col = "event_count"
 #' )
 #' }
 #'
 #' @export
-
 risk_count_units <- function(
   data,
   unit_id_col,

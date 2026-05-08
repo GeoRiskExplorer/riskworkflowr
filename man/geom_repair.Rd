@@ -2,30 +2,26 @@
 % Please edit documentation in R/geom_repair.R
 \name{geom_repair}
 \alias{geom_repair}
-\title{Repair and normalise geometry for processing}
+\title{Repair invalid geometry for spatial processing}
 \usage{
 geom_repair(x, quiet = FALSE)
 }
 \arguments{
-\item{quiet}{Logical; if TRUE, suppress QA messages.}
+\item{x}{An sf object.}
 
-\item{data}{An sf object.}
-
-\item{make_valid}{Logical; if TRUE, apply \code{sf::st_make_valid()}.}
-
-\item{drop_zm}{Logical; if TRUE, remove Z and M dimensions.}
+\item{quiet}{Logical; if TRUE, suppress repair summary messages.}
 }
 \value{
-An sf object with repaired/normalised geometry.
+An sf object with repaired geometry.
 }
 \description{
-Repairs invalid geometries and optionally standardises geometry
-structure for downstream spatial processing workflows.
+Repairs invalid geometries using \code{sf::st_make_valid()} so downstream
+spatial predicates and joins behave more reliably.
 }
 \details{
-This function is intended to support reliable spatial operations
-across sf, GEOS, DuckDB, and ArcGIS-derived workflows where
-geometry validity or structure differences may affect processing.
+This function is intended to support reliable spatial operations across
+sf, GEOS, DuckDB, and ArcGIS-derived workflows where geometry validity may
+affect processing.
 }
 \examples{
 \dontrun{

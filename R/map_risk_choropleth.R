@@ -2,6 +2,36 @@
 # map_risk_choropleth.R
 # Purpose: Classed choropleth map for areal units / hexbins
 
+#' Create a classed choropleth risk map
+#'
+#' Creates a choropleth map for areal units or hexbins using classed colour
+#' schemes and cartographic defaults appropriate for spatial risk analysis.
+#'
+#' Supports sequential, diverging, and qualitative colour schemes using
+#' Cynthia Brewer-style palettes through `RColorBrewer`.
+#'
+#' @param data An sf object.
+#' @param fill_col Name of the variable to map.
+#' @param map_type Type of mapped variable. Used to select default palettes and
+#' classification behaviour.
+#' @param classification Classification method.
+#' @param n_classes Number of classes for classified maps.
+#' @param palette Colour palette name.
+#' @param reverse_palette Logical; if TRUE, reverse palette direction.
+#' @param title Optional plot title.
+#' @param subtitle Optional plot subtitle.
+#' @param fill_label Legend label.
+#' @param border_colour Polygon border colour.
+#' @param border_width Polygon border width.
+#' @param na_colour Colour used for missing values.
+#'
+#' @return A ggplot object.
+#'
+#' @references
+#' Brewer CA. Designing Better Maps: A Guide for GIS Users.
+#'
+#' @export
+
 map_risk_choropleth <- function(
   data,
   fill_col,
@@ -89,9 +119,9 @@ map_risk_choropleth <- function(
       breaks = c(-Inf, 0, 0.75, 1.25, 2, Inf),
       labels = c(
         "0",
-        ">0–0.75",
-        "0.75–1.25",
-        "1.25–2",
+        ">0-0.75",
+        "0.75-1.25",
+        "1.25-2",
         ">2"
       ),
       include.lowest = TRUE,

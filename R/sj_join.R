@@ -2,38 +2,42 @@
 # sj_join.R
 # Purpose: Spatial join helper with explicit join modes
 
+
 #' Spatially join points to polygon units
 #'
-#' Assigns point features to polygon units using intersect,
-#' nearest, or intersect-nearest logic.
+#' Assigns point features to polygon units using intersect, nearest, or
+#' intersect-nearest logic.
 #'
-#' Intended for reproducible spatial assignment workflows
-#' supporting areal units and hexagonal grids.
+#' This function is intended for reproducible spatial assignment workflows
+#' supporting areal units, custom polygons, and hexagonal grids.
+#'
+#' The output includes `join_method` and `join_distance_m` fields to support
+#' auditability of spatial assignment decisions.
 #'
 #' @param points An sf point object.
-#' @param units An sf polygon object.
-#' @param unit_id_col Column containing unique polygon identifiers.
-#' @param join_mode Spatial join mode. One of:
-#'   `"intersect"`, `"nearest"`, or `"intersect_nearest"`.
-#' @param max_distance Optional maximum nearest distance in map units.
-#' @param repair_units Logical; if TRUE, repair unit geometry before join.
-#' @param quiet Logical; if TRUE, suppress QA messages.
+#' @param polygons An sf polygon object containing target join units.
+#' @param id_col Name of the polygon identifier column to attach to points.
+#' @param name_col Optional polygon name column to attach to points.
+#' @param join_mode Spatial join mode. One of `"intersect"`, `"nearest"`,
+#'   or `"intersect_nearest"`.
+#' @param repair_polygons Logical; if TRUE, repair polygon geometry before
+#'   spatial predicates are evaluated.
 #'
-#' @return An sf object of joined point features.
+#' @return An sf object of joined point features with `join_method` and
+#' `join_distance_m` columns.
 #'
 #' @examples
 #' \dontrun{
 #' joined <- sj_join(
 #'   points = pts,
-#'   units = polygons,
-#'   unit_id_col = "lga_code",
+#'   polygons = polygons,
+#'   id_col = "lga_code",
+#'   name_col = "lga_name",
 #'   join_mode = "intersect_nearest"
 #' )
 #' }
 #'
 #' @export
-#' 
-
 sj_join <- function(
   points,
   polygons,

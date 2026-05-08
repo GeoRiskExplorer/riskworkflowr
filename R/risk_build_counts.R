@@ -2,6 +2,28 @@
 # risk_build_counts.R
 # Purpose: Build counted polygon units from point events and analysis units
 
+#' Build event counts for spatial units
+#'
+#' Runs the core count-building workflow: spatially joins points to units,
+#' counts events by unit, and joins the counts back to the original units.
+#'
+#' This function works for administrative areas, custom polygons, and hexbins.
+#'
+#' @param points An sf point object.
+#' @param units An sf polygon or hexbin object.
+#' @param unit_id_col Name of the unit identifier column.
+#' @param unit_name_col Optional unit name column.
+#' @param join_mode Spatial join mode passed to [sj_join()].
+#' @param count_col Name of the output count column.
+#' @param missing_count_value Value used for units with no events.
+#' @param repair_units Logical; if TRUE, repair unit geometry before spatial joins.
+#' @param return Return `"units"` for counted units only, or `"all"` for a list
+#'   containing joined points, counts, and counted units.
+#'
+#' @return An sf object, or a list when `return = "all"`.
+#'
+#' @export
+
 risk_build_counts <- function(
   points,
   units,

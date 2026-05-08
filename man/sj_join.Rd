@@ -16,36 +16,40 @@ sj_join(
 \arguments{
 \item{points}{An sf point object.}
 
-\item{join_mode}{Spatial join mode. One of:
-\code{"intersect"}, \code{"nearest"}, or \code{"intersect_nearest"}.}
+\item{polygons}{An sf polygon object containing target join units.}
 
-\item{units}{An sf polygon object.}
+\item{id_col}{Name of the polygon identifier column to attach to points.}
 
-\item{unit_id_col}{Column containing unique polygon identifiers.}
+\item{name_col}{Optional polygon name column to attach to points.}
 
-\item{max_distance}{Optional maximum nearest distance in map units.}
+\item{join_mode}{Spatial join mode. One of \code{"intersect"}, \code{"nearest"},
+or \code{"intersect_nearest"}.}
 
-\item{repair_units}{Logical; if TRUE, repair unit geometry before join.}
-
-\item{quiet}{Logical; if TRUE, suppress QA messages.}
+\item{repair_polygons}{Logical; if TRUE, repair polygon geometry before
+spatial predicates are evaluated.}
 }
 \value{
-An sf object of joined point features.
+An sf object of joined point features with \code{join_method} and
+\code{join_distance_m} columns.
 }
 \description{
-Assigns point features to polygon units using intersect,
-nearest, or intersect-nearest logic.
+Assigns point features to polygon units using intersect, nearest, or
+intersect-nearest logic.
 }
 \details{
-Intended for reproducible spatial assignment workflows
-supporting areal units and hexagonal grids.
+This function is intended for reproducible spatial assignment workflows
+supporting areal units, custom polygons, and hexagonal grids.
+
+The output includes \code{join_method} and \code{join_distance_m} fields to support
+auditability of spatial assignment decisions.
 }
 \examples{
 \dontrun{
 joined <- sj_join(
   points = pts,
-  units = polygons,
-  unit_id_col = "lga_code",
+  polygons = polygons,
+  id_col = "lga_code",
+  name_col = "lga_name",
   join_mode = "intersect_nearest"
 )
 }

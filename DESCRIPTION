@@ -7,21 +7,20 @@ Description: Tools for preparing, assigning, aggregating, calculating, and mappi
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 Imports:
     classInt,
     dplyr,
     ggplot2,
-    RColorBrewer,
     sf,
     stats,
     tools
 Suggests:
     testthat (>= 3.0.0),
     knitr,
+    RColorBrewer,
     rmarkdown
 Config/testthat/edition: 3
 Depends: 
     R (>= 3.5)
 LazyData: true
-
+Config/roxygen2/version: 8.0.0

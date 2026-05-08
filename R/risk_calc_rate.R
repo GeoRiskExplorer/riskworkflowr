@@ -2,6 +2,27 @@
 # risk_calc_rate.R
 # Purpose: Calculate event/risk rate using count and denominator columns
 
+#' Calculate event rate
+#'
+#' Calculates a simple event rate using an observed count column and denominator
+#' column, with a user-defined multiplier.
+#'
+#' For example, with `multiplier = 10000`, the function calculates events per
+#' 10,000 population or exposure units.
+#'
+#' @param data A data frame or sf object.
+#' @param count_col Name of the observed count column.
+#' @param denominator_col Name of the denominator, population, or exposure column.
+#' @param rate_col Name of the output rate column.
+#' @param multiplier Rate multiplier. Defaults are user-controlled, such as
+#'   100, 1,000, 10,000, or 100,000.
+#' @param zero_denominator_value Value returned when denominator is missing,
+#'   zero, or negative.
+#'
+#' @return Input data with an added rate column.
+#'
+#' @export
+
 risk_calc_rate <- function(
   data,
   count_col,

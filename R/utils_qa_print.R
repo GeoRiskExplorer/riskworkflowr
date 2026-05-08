@@ -2,6 +2,15 @@
 # utils_qa_print.R
 # Purpose: Print QA summaries in readable console format
 
+#' Print QA summary for areal or hexbin counts
+#'
+#' Prints a simple console summary of event counts and unit coverage.
+#'
+#' @param units A data frame or sf object containing counted units.
+#' @param count_col Name of count column.
+#'
+#' @return Invisibly returns NULL.
+
 qa_print_areal_counts <- function(units, count_col = "event_count") {
 
   df <- sf::st_drop_geometry(units)
