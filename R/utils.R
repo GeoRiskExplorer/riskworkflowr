@@ -1,3 +1,7 @@
-# utils.R
-# Placeholder for package function development.
+# 1 ------------------------------------------------------------------------
+# Null coalesce helper
+
+`%||%` <- function(x, y) {
+  if (is.null(x)) y else x
+}
 
