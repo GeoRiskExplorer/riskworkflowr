@@ -1,22 +1,39 @@
+# R project/session files
 .Rproj.user
 .Rhistory
 .RData
 .Ruserdata
-outputs/
-data-raw/gdb/*.gdb/
-config/project_paths.yml
-*.qs2
-*.duckdb
-*.gpkg
 
-# Local/private project paths
-dev/setup/01_set_project_paths.R
-# Generated outputs
-# Large/local spatial data
-*.gdb/
-*.gdb
-# R/session files
+# RStudio / Positron project files
+*.Rproj
+
+# Package build artifacts
+.Rbuildignore
 inst/doc
 /doc/
 /Meta/
-# docs
+
+# pkgdown output
+docs/
+
+# Local/private development
+dev/
+notes/
+scratch/
+exploratory/
+
+# Outputs
+outputs/
+
+# Local config
+config/project_paths.yml
+
+# Spatial/data files
+*.duckdb
+*.gpkg
+*.qs2
+*.gdb
+*.gdb/
+
+# data-raw temporary geodatabases
+data-raw/gdb/*.gdb/
