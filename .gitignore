@@ -3,29 +3,24 @@
 .Rhistory
 .RData
 .Ruserdata
-
-# RStudio / Positron project files
 *.Rproj
-
-# Package build artifacts
-.Rbuildignore
-inst/doc
-/doc/
-/Meta/
-
-# pkgdown output
-docs/
 
 # Local/private development
 dev/
 notes/
 scratch/
 exploratory/
+config/
 
 # Outputs
 outputs/
 
-# Local config
+# Package build artifacts
+inst/doc
+/doc/
+/Meta/
+
+# Local/private config
 config/project_paths.yml
 
 # Spatial/data files

@@ -1,8 +1,0 @@
-# config/project_paths_example.yml
-
-arcgis_project_root: "E:/ArcGIS_Projects/riskworkflowr_spatial"
-test_gdb_path: "E:/ArcGIS_Projects/riskworkflowr_spatial/riskworkflowr_spatial.gdb"
-
-output_maps_path: "E:/Packages/riskworkflowr/outputs/maps"
-output_tables_path: "E:/Packages/riskworkflowr/outputs/tables"
-output_qa_path: "E:/Packages/riskworkflowr/outputs/qa"
