@@ -19,4 +19,4 @@ dev/setup/01_set_project_paths.R
 inst/doc
 /doc/
 /Meta/
-docs
+# docs

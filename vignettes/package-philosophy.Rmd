@@ -1,19 +1,22 @@
 ---
-title: "package-philosophy"
+title: "Package Philosophy and Design Principles"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{package-philosophy}
+  %\VignetteIndexEntry{Package Philosophy and Design Principles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r, include = FALSE}
-knitr::opts_chunk$set(
-  collapse = TRUE,
-  comment = "#>"
-)
-```
+## Overview
 
-```{r setup}
-library(riskworkflowr)
-```
+`riskworkflowr` is designed as a reproducible spatial risk workflow package.
+
+It is not intended to replace specialist R packages for geometry processing, epidemiology, spatial statistics, mapping, or modelling.
+
+Instead, the package aims to help analysts connect common spatial risk analysis steps into a consistent and auditable workflow.
+
+## Core workflow
+
+The package is built around a simple workflow:
+
+`point events -> spatial assignment -> aggregation/counts -> risk metrics -> mapping`

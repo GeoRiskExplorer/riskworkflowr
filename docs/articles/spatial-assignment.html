@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>spatial-assignment • riskworkflowr</title>
+<title>Spatial Assignment Workflows • riskworkflowr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="spatial-assignment">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Spatial Assignment Workflows">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +52,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>spatial-assignment</h1>
+      <h1>Spatial Assignment Workflows</h1>
             
       
 
@@ -61,9 +61,173 @@
 
     
     
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>Spatial assignment is the process of linking point-based events to
+spatial analysis units.</p>
+<p>In <code>riskworkflowr</code>, this usually means assigning point
+events to:</p>
+<ul>
+<li>administrative boundaries</li>
+<li>custom polygons</li>
+<li>operational areas</li>
+<li>H3 or hexagonal grids</li>
+</ul>
+<p>This step is important because all downstream counts, rates, SMRs,
+and maps depend on the assignment logic used.</p>
+</div>
+<div class="section level2">
+<h2 id="why-spatial-assignment-matters">Why spatial assignment matters<a class="anchor" aria-label="anchor" href="#why-spatial-assignment-matters"></a>
+</h2>
+<p>Spatial joins can appear simple, but different assignment choices can
+produce different analytical outputs.</p>
+<p>For example:</p>
+<ul>
+<li>a point may fall inside a polygon</li>
+<li>a point may fall just outside a polygon due to boundary or geocoding
+uncertainty</li>
+<li>a point may need to be assigned to the nearest unit</li>
+<li>a point may require an auditable fallback rule</li>
+</ul>
+<p><code>riskworkflowr</code> supports transparent assignment logic so
+that analysts can understand how events were allocated.</p>
+</div>
+<div class="section level2">
+<h2 id="supported-join-modes">Supported join modes<a class="anchor" aria-label="anchor" href="#supported-join-modes"></a>
+</h2>
+<p>The main spatial assignment function is:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sj_join.html">sj_join</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p>It supports three join modes:</p>
+<pre class="text"><code><span><span class="va">intersect</span></span>
+<span><span class="va">nearest</span></span>
+<span><span class="va">intersect_nearest</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="intersect-assignment">Intersect assignment<a class="anchor" aria-label="anchor" href="#intersect-assignment"></a>
+</h2>
+<p>Intersect assignment links each point to the polygon it falls
+within.</p>
+<p>This is usually appropriate when:</p>
+<ul>
+<li>point locations are accurate</li>
+<li>polygon boundaries are meaningful</li>
+<li>events should only be assigned if they fall inside a unit</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sj_join.html">sj_join</a></span><span class="op">(</span></span>
+<span>  points <span class="op">=</span> <span class="va">event_points</span>,</span>
+<span>  polygons <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  id_col <span class="op">=</span> <span class="st">"unit_id"</span>,</span>
+<span>  join <span class="op">=</span> <span class="st">"intersect"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="nearest-assignment">Nearest assignment<a class="anchor" aria-label="anchor" href="#nearest-assignment"></a>
+</h2>
+<p>Nearest assignment links each point to the closest polygon.</p>
+<p>This may be useful when:</p>
+<ul>
+<li>points are near but not inside a polygon</li>
+<li>boundary precision is imperfect</li>
+<li>geocoding uncertainty exists</li>
+<li>every event must be assigned to a unit</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sj_join.html">sj_join</a></span><span class="op">(</span></span>
+<span>  points <span class="op">=</span> <span class="va">event_points</span>,</span>
+<span>  polygons <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  id_col <span class="op">=</span> <span class="st">"unit_id"</span>,</span>
+<span>  join <span class="op">=</span> <span class="st">"nearest"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="intersect-nearest-assignment">Intersect-nearest assignment<a class="anchor" aria-label="anchor" href="#intersect-nearest-assignment"></a>
+</h2>
+<p>The intersect-nearest workflow first attempts an intersect join and
+then uses nearest assignment as a fallback.</p>
+<p>This is often useful in operational spatial risk workflows because it
+provides a practical balance between strict spatial containment and
+complete event allocation.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/sj_join.html">sj_join</a></span><span class="op">(</span></span>
+<span>  points <span class="op">=</span> <span class="va">event_points</span>,</span>
+<span>  polygons <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  id_col <span class="op">=</span> <span class="st">"unit_id"</span>,</span>
+<span>  join <span class="op">=</span> <span class="st">"intersect_nearest"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="join-auditability">Join auditability<a class="anchor" aria-label="anchor" href="#join-auditability"></a>
+</h2>
+<p>Spatial assignment should be auditable.</p>
+<p>Where applicable, <code>riskworkflowr</code> records fields such
+as:</p>
+<pre class="text"><code><span><span class="va">join_method</span></span>
+<span><span class="va">join_distance_m</span></span></code></pre>
+<p>These fields help distinguish events assigned by direct intersection
+from events assigned using a nearest fallback.</p>
+<p>This is important for review, QA, and communication.</p>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>Spatial assignment assumes that:</p>
+<ul>
+<li>the point geometry is suitable for analysis</li>
+<li>the analysis unit geometry is valid for the processing context</li>
+<li>the coordinate reference system is appropriate for distance
+calculations</li>
+<li>the selected join rule matches the analytical question</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="limitations-and-pitfalls">Limitations and pitfalls<a class="anchor" aria-label="anchor" href="#limitations-and-pitfalls"></a>
+</h2>
+<p>Spatial assignment may be affected by:</p>
+<ul>
+<li>geocoding uncertainty</li>
+<li>boundary misalignment</li>
+<li>invalid or complex geometry</li>
+<li>points located near polygon edges</li>
+<li>use of geographic CRS for distance calculations</li>
+<li>inappropriate fallback assignment rules</li>
+</ul>
+<p>Nearest assignment should be used carefully where distance or
+boundary meaning is important.</p>
+</div>
+<div class="section level2">
+<h2 id="alternative-approaches">Alternative approaches<a class="anchor" aria-label="anchor" href="#alternative-approaches"></a>
+</h2>
+<p>Other valid approaches may include:</p>
+<ul>
+<li>manual review of uncertain points</li>
+<li>distance thresholds</li>
+<li>buffer-based assignment</li>
+<li>probabilistic assignment</li>
+<li>hierarchical assignment rules</li>
+<li>exclusion of uncertain locations</li>
+<li>sensitivity testing across multiple assignment methods</li>
+</ul>
+<p>The appropriate method depends on the data, spatial scale,
+uncertainty, and decision context.</p>
+</div>
+<div class="section level2">
+<h2 id="future-development">Future development<a class="anchor" aria-label="anchor" href="#future-development"></a>
+</h2>
+<p>Future versions of <code>riskworkflowr</code> may include additional
+support for:</p>
+<ul>
+<li>distance thresholds for nearest joins</li>
+<li>clearer QA summaries of fallback assignments</li>
+<li>assignment uncertainty flags</li>
+<li>sensitivity testing across join modes</li>
+<li>richer diagnostics for boundary and CRS issues</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

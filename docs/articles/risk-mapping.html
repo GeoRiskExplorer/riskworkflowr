@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>risk-mapping • riskworkflowr</title>
+<title>Risk Mapping • riskworkflowr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="risk-mapping">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Risk Mapping">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +52,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>risk-mapping</h1>
+      <h1>Risk Mapping</h1>
             
       
 
@@ -61,9 +61,241 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>Mapping is often the final communication stage of a spatial risk
+workflow.</p>
+<p>In <code>riskworkflowr</code>, mapping functions are intended to
+support:</p>
+<ul>
+<li>exploratory analysis</li>
+<li>operational review</li>
+<li>comparative spatial interpretation</li>
+<li>communication of broad spatial patterns</li>
+</ul>
+<p>The package currently focuses on choropleth-style thematic mapping
+workflows.</p>
+</div>
+<div class="section level2">
+<h2 id="core-workflow">Core workflow<a class="anchor" aria-label="anchor" href="#core-workflow"></a>
+</h2>
+<p>Typical workflows involve:</p>
+<pre class="text"><code>point events
+→ spatial assignment
+→ aggregation/counts
+→ risk metrics
+→ mapping</code></pre>
+<p>The main mapping helper function is:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_risk_choropleth.html">map_risk_choropleth</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="supported-map-types">Supported map types<a class="anchor" aria-label="anchor" href="#supported-map-types"></a>
+</h2>
+<p>Current map types include:</p>
+<pre class="text"><code><span><span class="va">count</span></span>
+<span><span class="va">rate</span></span>
+<span><span class="va">probability</span></span>
+<span><span class="va">smr</span></span>
+<span><span class="va">category</span></span></code></pre>
+<p>These support both continuous and categorical spatial outputs.</p>
+</div>
+<div class="section level2">
+<h2 id="example-workflow">Example workflow<a class="anchor" aria-label="anchor" href="#example-workflow"></a>
+</h2>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_risk_choropleth.html">map_risk_choropleth</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  fill_col <span class="op">=</span> <span class="st">"smr"</span>,</span>
+<span>  map_type <span class="op">=</span> <span class="st">"smr"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="choropleth-mapping-considerations">Choropleth mapping considerations<a class="anchor" aria-label="anchor" href="#choropleth-mapping-considerations"></a>
+</h2>
+<p>Choropleth maps can be useful for communicating broad spatial
+patterns, but they also introduce important interpretive challenges.</p>
+<p>Map outputs are influenced by:</p>
+<ul>
+<li>classification method</li>
+<li>colour palette</li>
+<li>spatial scale</li>
+<li>denominator quality</li>
+<li>spatial unit design</li>
+<li>event rarity</li>
+<li>data smoothing choices</li>
+</ul>
+<p>The same underlying data may appear substantially different depending
+on these decisions.</p>
+</div>
+<div class="section level2">
+<h2 id="classification-methods">Classification methods<a class="anchor" aria-label="anchor" href="#classification-methods"></a>
+</h2>
+<p>Different classification approaches may produce different visual
+interpretations.</p>
+<p>Common approaches include:</p>
+<ul>
+<li>quantile classification</li>
+<li>equal interval classification</li>
+<li>Jenks natural breaks</li>
+<li>custom thresholds</li>
+<li>binary or categorical thresholds</li>
+</ul>
+<p>No single classification method is universally correct.</p>
+<p>The most appropriate approach depends on:</p>
+<ul>
+<li>the analytical objective</li>
+<li>data distribution</li>
+<li>intended audience</li>
+<li>communication requirements</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="rates-versus-counts">Rates versus counts<a class="anchor" aria-label="anchor" href="#rates-versus-counts"></a>
+</h2>
+<p>Counts and rates communicate different information.</p>
+<div class="section level3">
+<h3 id="counts">Counts<a class="anchor" aria-label="anchor" href="#counts"></a>
+</h3>
+<p>Count maps may highlight:</p>
+<ul>
+<li>total burden</li>
+<li>operational workload</li>
+<li>absolute event volume</li>
+</ul>
+</div>
+<div class="section level3">
+<h3 id="rates">Rates<a class="anchor" aria-label="anchor" href="#rates"></a>
+</h3>
+<p>Rate maps may highlight:</p>
+<ul>
+<li>relative concentration</li>
+<li>comparative occurrence</li>
+<li>elevated occurrence relative to exposure</li>
+</ul>
+<p>Both may be useful, depending on the question being asked.</p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="smr-style-mapping">SMR-style mapping<a class="anchor" aria-label="anchor" href="#smr-style-mapping"></a>
+</h2>
+<p>SMR-style maps may support exploratory identification of areas with
+comparatively elevated or reduced observed-versus-expected outcomes.</p>
+<p>However, these maps should not be interpreted as:</p>
+<ul>
+<li>causal evidence</li>
+<li>definitive hotspot detection</li>
+<li>proof of operational failure</li>
+<li>precise estimates of individual risk</li>
+</ul>
+<p>Interpretation should consider:</p>
+<ul>
+<li>denominator quality</li>
+<li>event rarity</li>
+<li>small number instability</li>
+<li>broader contextual information</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="category-mapping">Category mapping<a class="anchor" aria-label="anchor" href="#category-mapping"></a>
+</h2>
+<p>Categorical maps may support communication of:</p>
+<ul>
+<li>dominant risk types</li>
+<li>comparative categories</li>
+<li>grouped classifications</li>
+<li>future distinctive category workflows</li>
+</ul>
+<p>Future versions of <code>riskworkflowr</code> are planned to support
+grouped category dominance outputs derived from grouped comparative SMR
+workflows.</p>
+</div>
+<div class="section level2">
+<h2 id="h3-and-hexagonal-mapping">H3 and hexagonal mapping<a class="anchor" aria-label="anchor" href="#h3-and-hexagonal-mapping"></a>
+</h2>
+<p>The same mapping workflow may be applied to:</p>
+<ul>
+<li>administrative boundaries</li>
+<li>custom polygons</li>
+<li>H3 grids</li>
+<li>hexagonal grids</li>
+</ul>
+<p>Different spatial unit systems may produce different visual
+impressions of the same underlying events.</p>
+<p>Analysts should carefully consider:</p>
+<ul>
+<li>resolution</li>
+<li>sparsity</li>
+<li>interpretability</li>
+<li>operational meaning</li>
+</ul>
+<p>when mapping fine-scale grids.</p>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>Mapping workflows assume:</p>
+<ul>
+<li>geometry is valid for the processing context</li>
+<li>spatial units are meaningful</li>
+<li>denominators are appropriate</li>
+<li>classification choices are defensible</li>
+<li>outputs are interpreted carefully</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="limitations-and-pitfalls">Limitations and pitfalls<a class="anchor" aria-label="anchor" href="#limitations-and-pitfalls"></a>
+</h2>
+<p>Potential issues include:</p>
+<ul>
+<li>misleading classification</li>
+<li>unstable rates</li>
+<li>sparse denominators</li>
+<li>false precision</li>
+<li>ecological interpretation risks</li>
+<li>overinterpretation of visual patterns</li>
+<li>boundary effects</li>
+<li>inconsistent spatial scales</li>
+</ul>
+<p>Maps should generally be interpreted as exploratory communication
+tools rather than definitive analytical conclusions.</p>
+</div>
+<div class="section level2">
+<h2 id="alternative-approaches">Alternative approaches<a class="anchor" aria-label="anchor" href="#alternative-approaches"></a>
+</h2>
+<p>Alternative visualisation approaches may include:</p>
+<ul>
+<li>proportional symbols</li>
+<li>density surfaces</li>
+<li>kernel density estimation</li>
+<li>interactive web mapping</li>
+<li>uncertainty mapping</li>
+<li>temporal animation</li>
+<li>small multiple comparisons</li>
+<li>bivariate mapping</li>
+</ul>
+<p>The most appropriate method depends on the intended analytical and
+communication objective.</p>
+</div>
+<div class="section level2">
+<h2 id="potential-future-directions">Potential future directions<a class="anchor" aria-label="anchor" href="#potential-future-directions"></a>
+</h2>
+<p>The following areas are currently being explored or considered as
+possible future enhancements to <code>riskworkflowr</code>.</p>
+<p>These items are exploratory only and should not be interpreted as
+guaranteed future functionality.</p>
+<p>Potential areas include:</p>
+<ul>
+<li>grouped/category SMR workflows</li>
+<li>distinctive category identification</li>
+<li>richer H3 workflows</li>
+<li>improved uncertainty handling</li>
+<li>enhanced mapping support</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

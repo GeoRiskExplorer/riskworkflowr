@@ -1,6 +1,233 @@
-# risk-mapping
+# Risk Mapping
+
+## Overview
+
+Mapping is often the final communication stage of a spatial risk
+workflow.
+
+In `riskworkflowr`, mapping functions are intended to support:
+
+- exploratory analysis
+- operational review
+- comparative spatial interpretation
+- communication of broad spatial patterns
+
+The package currently focuses on choropleth-style thematic mapping
+workflows.
+
+## Core workflow
+
+Typical workflows involve:
+
+``` text
+point events
+→ spatial assignment
+→ aggregation/counts
+→ risk metrics
+→ mapping
+```
+
+The main mapping helper function is:
 
 ``` r
 
-library(riskworkflowr)
+map_risk_choropleth()
 ```
+
+## Supported map types
+
+Current map types include:
+
+``` text
+count
+rate
+probability
+smr
+category
+```
+
+These support both continuous and categorical spatial outputs.
+
+## Example workflow
+
+``` r
+
+map_risk_choropleth(
+  data = analysis_units,
+  fill_col = "smr",
+  map_type = "smr"
+)
+```
+
+## Choropleth mapping considerations
+
+Choropleth maps can be useful for communicating broad spatial patterns,
+but they also introduce important interpretive challenges.
+
+Map outputs are influenced by:
+
+- classification method
+- colour palette
+- spatial scale
+- denominator quality
+- spatial unit design
+- event rarity
+- data smoothing choices
+
+The same underlying data may appear substantially different depending on
+these decisions.
+
+## Classification methods
+
+Different classification approaches may produce different visual
+interpretations.
+
+Common approaches include:
+
+- quantile classification
+- equal interval classification
+- Jenks natural breaks
+- custom thresholds
+- binary or categorical thresholds
+
+No single classification method is universally correct.
+
+The most appropriate approach depends on:
+
+- the analytical objective
+- data distribution
+- intended audience
+- communication requirements
+
+## Rates versus counts
+
+Counts and rates communicate different information.
+
+### Counts
+
+Count maps may highlight:
+
+- total burden
+- operational workload
+- absolute event volume
+
+### Rates
+
+Rate maps may highlight:
+
+- relative concentration
+- comparative occurrence
+- elevated occurrence relative to exposure
+
+Both may be useful, depending on the question being asked.
+
+## SMR-style mapping
+
+SMR-style maps may support exploratory identification of areas with
+comparatively elevated or reduced observed-versus-expected outcomes.
+
+However, these maps should not be interpreted as:
+
+- causal evidence
+- definitive hotspot detection
+- proof of operational failure
+- precise estimates of individual risk
+
+Interpretation should consider:
+
+- denominator quality
+- event rarity
+- small number instability
+- broader contextual information
+
+## Category mapping
+
+Categorical maps may support communication of:
+
+- dominant risk types
+- comparative categories
+- grouped classifications
+- future distinctive category workflows
+
+Future versions of `riskworkflowr` are planned to support grouped
+category dominance outputs derived from grouped comparative SMR
+workflows.
+
+## H3 and hexagonal mapping
+
+The same mapping workflow may be applied to:
+
+- administrative boundaries
+- custom polygons
+- H3 grids
+- hexagonal grids
+
+Different spatial unit systems may produce different visual impressions
+of the same underlying events.
+
+Analysts should carefully consider:
+
+- resolution
+- sparsity
+- interpretability
+- operational meaning
+
+when mapping fine-scale grids.
+
+## Assumptions
+
+Mapping workflows assume:
+
+- geometry is valid for the processing context
+- spatial units are meaningful
+- denominators are appropriate
+- classification choices are defensible
+- outputs are interpreted carefully
+
+## Limitations and pitfalls
+
+Potential issues include:
+
+- misleading classification
+- unstable rates
+- sparse denominators
+- false precision
+- ecological interpretation risks
+- overinterpretation of visual patterns
+- boundary effects
+- inconsistent spatial scales
+
+Maps should generally be interpreted as exploratory communication tools
+rather than definitive analytical conclusions.
+
+## Alternative approaches
+
+Alternative visualisation approaches may include:
+
+- proportional symbols
+- density surfaces
+- kernel density estimation
+- interactive web mapping
+- uncertainty mapping
+- temporal animation
+- small multiple comparisons
+- bivariate mapping
+
+The most appropriate method depends on the intended analytical and
+communication objective.
+
+## Potential future directions
+
+The following areas are currently being explored or considered as
+possible future enhancements to `riskworkflowr`.
+
+These items are exploratory only and should not be interpreted as
+guaranteed future functionality.
+
+Potential areas include:
+
+- grouped/category SMR workflows
+- distinctive category identification
+- richer H3 workflows
+- improved uncertainty handling
+- enhanced mapping support

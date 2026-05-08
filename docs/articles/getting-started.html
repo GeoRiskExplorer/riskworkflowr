@@ -81,6 +81,22 @@ spatial risk analysis, including:</p>
 </ul>
 </div>
 <div class="section level2">
+<h2 id="why-riskworkflowr">Why riskworkflowr?<a class="anchor" aria-label="anchor" href="#why-riskworkflowr"></a>
+</h2>
+<p>Many spatial risk workflows require analysts to repeatedly
+combine:</p>
+<ul>
+<li>spatial joins</li>
+<li>event aggregation</li>
+<li>comparative risk metrics</li>
+<li>choropleth mapping</li>
+<li>reproducible analytical workflows</li>
+</ul>
+<p><code>riskworkflowr</code> aims to provide a consistent framework for
+these commonly repeated tasks while remaining compatible with the
+broader R spatial ecosystem.</p>
+</div>
+<div class="section level2">
 <h2 id="core-workflow">Core workflow<a class="anchor" aria-label="anchor" href="#core-workflow"></a>
 </h2>
 <pre class="text"><code>point events
@@ -88,23 +104,32 @@ spatial risk analysis, including:</p>
 → aggregation/counts
 → risk metrics
 → mapping</code></pre>
+<p>A core design principle of the package is:</p>
+<pre class="text"><code><span><span class="st">"units are units"</span></span></code></pre>
+<p>The same analytical workflow should operate consistently across:</p>
+<ul>
+<li>administrative boundaries</li>
+<li>custom polygons</li>
+<li>H3 hexagonal grids</li>
+<li>other areal unit systems</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="install-package">Install package<a class="anchor" aria-label="anchor" href="#install-package"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"GeoRiskExplorer/riskworkflowr"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="load-package">Load package<a class="anchor" aria-label="anchor" href="#load-package"></a>
 </h2>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="create-example-data">Create example data<a class="anchor" aria-label="anchor" href="#create-example-data"></a>
 </h2>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
 <span>  event_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">15</span><span class="op">)</span>,</span>
 <span>  population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">3000</span><span class="op">)</span></span>
@@ -113,7 +138,7 @@ spatial risk analysis, including:</p>
 <div class="section level2">
 <h2 id="calculate-rates">Calculate rates<a class="anchor" aria-label="anchor" href="#calculate-rates"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_rate.html">risk_calc_rate</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  count_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
@@ -127,7 +152,7 @@ spatial risk analysis, including:</p>
 <div class="section level2">
 <h2 id="calculate-smr">Calculate SMR<a class="anchor" aria-label="anchor" href="#calculate-smr"></a>
 </h2>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_smr.html">risk_calc_smr</a></span><span class="op">(</span></span>
 <span>  data <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  observed_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
@@ -141,6 +166,16 @@ spatial risk analysis, including:</p>
 <span><span class="co">## 1 not_clearly_different</span></span>
 <span><span class="co">## 2 not_clearly_different</span></span>
 <span><span class="co">## 3 not_clearly_different</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="methodological-scope">Methodological scope<a class="anchor" aria-label="anchor" href="#methodological-scope"></a>
+</h2>
+<p>The package primarily focuses on practical and reproducible workflows
+for exploratory spatial risk analysis and communication.</p>
+<p>The implemented methods should not be interpreted as replacing more
+advanced epidemiological, spatial statistical, or inferential modelling
+approaches where such methods are appropriate and supported by the
+available data.</p>
 </div>
 <div class="section level2">
 <h2 id="important-assumptions">Important assumptions<a class="anchor" aria-label="anchor" href="#important-assumptions"></a>

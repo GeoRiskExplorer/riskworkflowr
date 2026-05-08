@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>counts-and-aggregation • riskworkflowr</title>
+<title>Counts and Aggregation • riskworkflowr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="counts-and-aggregation">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Counts and Aggregation">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +52,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>counts-and-aggregation</h1>
+      <h1>Counts and Aggregation</h1>
             
       
 
@@ -61,9 +61,175 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p>Many spatial risk workflows ultimately rely on counts aggregated to
+analysis units.</p>
+<p>Typical workflows involve:</p>
+<pre class="text"><code>point events
+→ spatial assignment
+→ counts by unit
+→ join counts back to polygons
+→ calculate risk metrics</code></pre>
+<p><code>riskworkflowr</code> provides helper functions to support
+reproducible and consistent aggregation workflows.</p>
+</div>
+<div class="section level2">
+<h2 id="core-functions">Core functions<a class="anchor" aria-label="anchor" href="#core-functions"></a>
+</h2>
+<p>The main aggregation functions include:</p>
+<pre class="text"><code><span><span class="fu"><a href="../reference/risk_count_units.html">risk_count_units</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/risk_join_counts.html">risk_join_counts</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/risk_build_counts.html">risk_build_counts</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="counting-events-by-unit">Counting events by unit<a class="anchor" aria-label="anchor" href="#counting-events-by-unit"></a>
+</h2>
+<p><code><a href="../reference/risk_count_units.html">risk_count_units()</a></code> summarises events by analysis
+unit.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  unit_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"C"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/risk_count_units.html">risk_count_units</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  unit_id_col <span class="op">=</span> <span class="st">"unit_id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   unit_id event_count</span></span>
+<span><span class="co">## 1       A           2</span></span>
+<span><span class="co">## 2       C           2</span></span>
+<span><span class="co">## 3       B           1</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="joining-counts-back-to-spatial-units">Joining counts back to spatial units<a class="anchor" aria-label="anchor" href="#joining-counts-back-to-spatial-units"></a>
+</h2>
+<p><code><a href="../reference/risk_join_counts.html">risk_join_counts()</a></code> joins aggregated counts back to
+spatial analysis units.</p>
+<p>The <code>units</code> input is expected to be an <code>sf</code>
+object. The example below is not evaluated in this vignette because it
+uses placeholder spatial data.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_join_counts.html">risk_join_counts</a></span><span class="op">(</span></span>
+<span>  units <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  counts <span class="op">=</span> <span class="va">unit_counts</span>,</span>
+<span>  unit_id_col <span class="op">=</span> <span class="st">"unit_id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="end-to-end-workflow">End-to-end workflow<a class="anchor" aria-label="anchor" href="#end-to-end-workflow"></a>
+</h2>
+<p><code><a href="../reference/risk_build_counts.html">risk_build_counts()</a></code> combines:</p>
+<ul>
+<li>spatial assignment</li>
+<li>aggregation</li>
+<li>count joins</li>
+</ul>
+<p>into a single workflow.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_build_counts.html">risk_build_counts</a></span><span class="op">(</span></span>
+<span>  points <span class="op">=</span> <span class="va">event_points</span>,</span>
+<span>  units <span class="op">=</span> <span class="va">analysis_units</span>,</span>
+<span>  unit_id_col <span class="op">=</span> <span class="st">"unit_id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="zero-count-handling">Zero-count handling<a class="anchor" aria-label="anchor" href="#zero-count-handling"></a>
+</h2>
+<p>Zero-event areas are important in spatial risk analysis.</p>
+<p><code>riskworkflowr</code> supports workflows where:</p>
+<ul>
+<li>areas with no events are retained</li>
+<li>missing counts are converted to zero</li>
+<li>full spatial coverage is preserved</li>
+</ul>
+<p>This is important for:</p>
+<ul>
+<li>rate calculations</li>
+<li>SMR workflows</li>
+<li>choropleth mapping</li>
+<li>H3 analyses</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="reproducibility-and-consistency">Reproducibility and consistency<a class="anchor" aria-label="anchor" href="#reproducibility-and-consistency"></a>
+</h2>
+<p>The aggregation workflow is designed to encourage:</p>
+<ul>
+<li>reproducible outputs</li>
+<li>consistent naming</li>
+<li>explicit join logic</li>
+<li>transparent handling of missing counts</li>
+<li>compatibility across areal unit systems</li>
+</ul>
+<p>A core package principle is:</p>
+<pre class="text"><code><span><span class="st">"units are units"</span></span></code></pre>
+<p>The same workflow should operate consistently across:</p>
+<ul>
+<li>administrative boundaries</li>
+<li>custom polygons</li>
+<li>H3 grids</li>
+<li>future spatial indexing systems</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>Aggregation workflows assume:</p>
+<ul>
+<li>events have already been appropriately assigned</li>
+<li>unit identifiers are unique and stable</li>
+<li>geometry validity is appropriate for the processing context</li>
+<li>count logic matches the analytical objective</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="limitations-and-pitfalls">Limitations and pitfalls<a class="anchor" aria-label="anchor" href="#limitations-and-pitfalls"></a>
+</h2>
+<p>Potential issues include:</p>
+<ul>
+<li>duplicate assignments</li>
+<li>inconsistent identifiers</li>
+<li>missing joins</li>
+<li>invalid geometry</li>
+<li>sparse data</li>
+<li>unstable counts in small areas</li>
+</ul>
+<p>Analysts should carefully review join logic and QA outputs before
+interpretation.</p>
+</div>
+<div class="section level2">
+<h2 id="alternative-approaches">Alternative approaches<a class="anchor" aria-label="anchor" href="#alternative-approaches"></a>
+</h2>
+<p>Alternative workflows may include:</p>
+<ul>
+<li>weighted assignment</li>
+<li>probabilistic assignment</li>
+<li>temporal aggregation</li>
+<li>hierarchical aggregation</li>
+<li>dynamic or moving spatial windows</li>
+<li>Bayesian smoothing</li>
+<li>spatial interpolation approaches</li>
+</ul>
+<p>The appropriate approach depends on the analytical context and
+decision requirements.</p>
+</div>
+<div class="section level2">
+<h2 id="future-development">Future development<a class="anchor" aria-label="anchor" href="#future-development"></a>
+</h2>
+<p>Future versions of <code>riskworkflowr</code> may include:</p>
+<ul>
+<li>richer QA summaries</li>
+<li>duplicate assignment diagnostics</li>
+<li>temporal aggregation workflows</li>
+<li>uncertainty indicators</li>
+<li>grouped/category aggregation workflows</li>
+<li>improved H3 aggregation utilities</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

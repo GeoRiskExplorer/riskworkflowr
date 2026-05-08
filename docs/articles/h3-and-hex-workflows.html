@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>h3-and-hex-workflows • riskworkflowr</title>
+<title>H3 and Hexagonal Workflows • riskworkflowr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="h3-and-hex-workflows">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="H3 and Hexagonal Workflows">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +52,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>h3-and-hex-workflows</h1>
+      <h1>H3 and Hexagonal Workflows</h1>
             
       
 
@@ -61,9 +61,193 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>riskworkflowr</code> is designed so that the same core workflow
+can be applied to different spatial unit systems.</p>
+<p>This includes:</p>
+<ul>
+<li>administrative boundaries</li>
+<li>custom polygons</li>
+<li>regular hexagonal grids</li>
+<li>H3 hexagonal grids</li>
+</ul>
+<p>A core package principle is:</p>
+<pre class="text"><code><span><span class="st">"units are units"</span></span></code></pre>
+<p>If a spatial unit layer contains valid geometry and a stable unit
+identifier, it should be usable in the same analytical workflow.</p>
+</div>
+<div class="section level2">
+<h2 id="why-use-hexagons-or-h3">Why use hexagons or H3?<a class="anchor" aria-label="anchor" href="#why-use-hexagons-or-h3"></a>
+</h2>
+<p>Hexagonal grids can be useful when analysts want a spatial framework
+that is less tied to administrative boundaries.</p>
+<p>Potential advantages include:</p>
+<ul>
+<li>consistent spatial units</li>
+<li>repeatable spatial indexing</li>
+<li>reduced dependence on changing administrative boundaries</li>
+<li>support for localised spatial pattern detection</li>
+<li>compatibility with gridded exposure or environmental datasets</li>
+</ul>
+<p>H3 grids may be especially useful where a consistent global spatial
+indexing system is required.</p>
+</div>
+<div class="section level2">
+<h2 id="when-hexagons-may-not-be-appropriate">When hexagons may not be appropriate<a class="anchor" aria-label="anchor" href="#when-hexagons-may-not-be-appropriate"></a>
+</h2>
+<p>Hexagons are not automatically better than areal units.</p>
+<p>They may be inappropriate where:</p>
+<ul>
+<li>event counts are very low</li>
+<li>denominators are unstable</li>
+<li>spatial units become too small for meaningful interpretation</li>
+<li>operational decisions are made using administrative or management
+boundaries</li>
+<li>privacy, confidentiality, or suppression rules apply</li>
+<li>stakeholders require outputs aligned to known regions</li>
+</ul>
+<p>In some workflows, an administrative boundary may be more
+interpretable and defensible than a fine-scale hexagonal grid.</p>
+</div>
+<div class="section level2">
+<h2 id="core-workflow">Core workflow<a class="anchor" aria-label="anchor" href="#core-workflow"></a>
+</h2>
+<p>The intended workflow is the same:</p>
+<pre class="text"><code>point events
+→ spatial assignment to units
+→ counts by unit
+→ risk metrics
+→ mapping</code></pre>
+<p>The key difference is that the analysis unit layer may be a hexagonal
+or H3 grid rather than an administrative boundary layer.</p>
+</div>
+<div class="section level2">
+<h2 id="example-workflow">Example workflow<a class="anchor" aria-label="anchor" href="#example-workflow"></a>
+</h2>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hex_counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_build_counts.html">risk_build_counts</a></span><span class="op">(</span></span>
+<span>  points <span class="op">=</span> <span class="va">event_points</span>,</span>
+<span>  units <span class="op">=</span> <span class="va">h3_grid</span>,</span>
+<span>  unit_id_col <span class="op">=</span> <span class="st">"hex_id"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">hex_rates</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/risk_calc_rate.html">risk_calc_rate</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">hex_counts</span>,</span>
+<span>  count_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  denominator_col <span class="op">=</span> <span class="st">"exposure"</span>,</span>
+<span>  rate_col <span class="op">=</span> <span class="st">"rate_per_10000"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/map_risk_choropleth.html">map_risk_choropleth</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">hex_rates</span>,</span>
+<span>  fill_col <span class="op">=</span> <span class="st">"rate_per_10000"</span>,</span>
+<span>  map_type <span class="op">=</span> <span class="st">"rate"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="choosing-an-appropriate-resolution">Choosing an appropriate resolution<a class="anchor" aria-label="anchor" href="#choosing-an-appropriate-resolution"></a>
+</h2>
+<p>H3 and hexagonal workflows require careful resolution selection.</p>
+<p>A grid that is too coarse may hide meaningful local variation.</p>
+<p>A grid that is too fine may produce:</p>
+<ul>
+<li>many zero-count cells</li>
+<li>unstable rates</li>
+<li>misleading hotspots</li>
+<li>sparse denominators</li>
+<li>noisy maps</li>
+</ul>
+<p>Resolution should be selected based on:</p>
+<ul>
+<li>event density</li>
+<li>denominator availability</li>
+<li>intended use</li>
+<li>privacy requirements</li>
+<li>operational interpretability</li>
+<li>computational performance</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="counts-denominators-and-exposure">Counts, denominators, and exposure<a class="anchor" aria-label="anchor" href="#counts-denominators-and-exposure"></a>
+</h2>
+<p>Hexagonal workflows require particular care with denominators.</p>
+<p>A meaningful denominator may be based on:</p>
+<ul>
+<li>resident population</li>
+<li>visitor exposure</li>
+<li>asset counts</li>
+<li>network length</li>
+<li>area</li>
+<li>time at risk</li>
+<li>activity participation</li>
+<li>modelled exposure surfaces</li>
+</ul>
+<p>The choice of denominator should match the risk question being
+asked.</p>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>H3 and hex workflows assume:</p>
+<ul>
+<li>the grid resolution is appropriate</li>
+<li>the unit identifier is stable</li>
+<li>denominator data can be meaningfully assigned to grid cells</li>
+<li>sparse cells are interpreted carefully</li>
+<li>the workflow supports the decision context</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="limitations-and-pitfalls">Limitations and pitfalls<a class="anchor" aria-label="anchor" href="#limitations-and-pitfalls"></a>
+</h2>
+<p>Potential issues include:</p>
+<ul>
+<li>false precision</li>
+<li>unstable rates in sparse cells</li>
+<li>denominator mismatch</li>
+<li>edge effects</li>
+<li>inappropriate resolution choice</li>
+<li>loss of administrative context</li>
+<li>overinterpretation of fine-scale patterns</li>
+</ul>
+<p>Hexagonal outputs should usually be interpreted as exploratory
+spatial summaries rather than definitive evidence of localised risk.</p>
+</div>
+<div class="section level2">
+<h2 id="relationship-to-areal-unit-workflows">Relationship to areal unit workflows<a class="anchor" aria-label="anchor" href="#relationship-to-areal-unit-workflows"></a>
+</h2>
+<p>The purpose of supporting H3 and hexagonal grids is not to replace
+areal unit analysis.</p>
+<p>Instead, these workflows provide an additional analytical option.</p>
+<p>In some cases:</p>
+<ul>
+<li>administrative units are better</li>
+<li>H3 grids are better</li>
+<li>both should be compared</li>
+<li>one may be better for analysis while the other is better for
+communication</li>
+</ul>
+<p>The appropriate unit system depends on the question, data, and
+decision context.</p>
+</div>
+<div class="section level2">
+<h2 id="future-development">Future development<a class="anchor" aria-label="anchor" href="#future-development"></a>
+</h2>
+<p>Future versions of <code>riskworkflowr</code> may include:</p>
+<ul>
+<li>H3-specific helper functions</li>
+<li>resolution suitability checks</li>
+<li>compact hexagon workflows</li>
+<li>sparse-cell diagnostics</li>
+<li>denominator assignment helpers</li>
+<li>sensitivity testing across resolutions</li>
+<li>comparison tools for areal units versus H3 grids</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

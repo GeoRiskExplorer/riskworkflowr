@@ -5,12 +5,12 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>risk-metrics • riskworkflowr</title>
+<title>Risk Metrics • riskworkflowr</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="risk-metrics">
+<script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Risk Metrics">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -52,7 +52,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
 
-      <h1>risk-metrics</h1>
+      <h1>Risk Metrics</h1>
             
       
 
@@ -61,9 +61,198 @@
 
     
     
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va">riskworkflowr</span><span class="op">)</span></span></code></pre></div>
-  </main>
+<div class="section level2">
+<h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
+</h2>
+<p><code>riskworkflowr</code> includes simple helper functions for
+calculating commonly used spatial risk metrics.</p>
+<p>The current metric functions include:</p>
+<pre class="text"><code><span><span class="fu"><a href="../reference/risk_calc_rate.html">risk_calc_rate</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/risk_calc_poisson_probability.html">risk_calc_poisson_probability</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/risk_calc_smr.html">risk_calc_smr</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<p>These functions are intended to support transparent and reproducible
+analytical workflows rather than replace specialist epidemiological or
+spatial statistical methods.</p>
+</div>
+<div class="section level2">
+<h2 id="example-data">Example data<a class="anchor" aria-label="anchor" href="#example-data"></a>
+</h2>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  event_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">10</span>, <span class="fl">20</span><span class="op">)</span>,</span>
+<span>  population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">2000</span>, <span class="fl">3000</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="rates">Rates<a class="anchor" aria-label="anchor" href="#rates"></a>
+</h2>
+<p><code><a href="../reference/risk_calc_rate.html">risk_calc_rate()</a></code> calculates a simple rate:</p>
+<pre class="text"><code>observed events / denominator × multiplier</code></pre>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_rate.html">risk_calc_rate</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  count_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  denominator_col <span class="op">=</span> <span class="st">"population"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   event_count population rate_per_10000</span></span>
+<span><span class="co">## 1           5       1000       50.00000</span></span>
+<span><span class="co">## 2          10       2000       50.00000</span></span>
+<span><span class="co">## 3          20       3000       66.66667</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="poisson-probability">Poisson probability<a class="anchor" aria-label="anchor" href="#poisson-probability"></a>
+</h2>
+<p><code><a href="../reference/risk_calc_poisson_probability.html">risk_calc_poisson_probability()</a></code> estimates the
+probability of one or more events occurring over a defined period using
+an observed event frequency.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">poisson_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  event_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  years <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/risk_calc_poisson_probability.html">risk_calc_poisson_probability</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">poisson_data</span>,</span>
+<span>  count_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  period_col <span class="op">=</span> <span class="st">"years"</span>,</span>
+<span>  output <span class="op">=</span> <span class="st">"both"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   event_count years lambda prob_event_ge_1 prob_event_ge_1_pct</span></span>
+<span><span class="co">## 1           1     1    1.0       0.6321206            63.21206</span></span>
+<span><span class="co">## 2           5     2    2.5       0.9179150            91.79150</span></span>
+<span><span class="co">## 3          10     5    2.0       0.8646647            86.46647</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="standardised-mortality-ratio-style-workflows">Standardised mortality ratio style workflows<a class="anchor" aria-label="anchor" href="#standardised-mortality-ratio-style-workflows"></a>
+</h2>
+<p><code><a href="../reference/risk_calc_smr.html">risk_calc_smr()</a></code> calculates expected counts and
+standardised mortality ratio style outputs.</p>
+<p>Although named using SMR terminology, the same general structure may
+be useful for other observed-versus-expected spatial risk workflows
+where an appropriate denominator is available.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_smr.html">risk_calc_smr</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  observed_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  denominator_col <span class="op">=</span> <span class="st">"population"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   event_count population expected_count       smr smr_lower smr_upper</span></span>
+<span><span class="co">## 1           5       1000       5.833333 0.8571429 0.2783120  2.000285</span></span>
+<span><span class="co">## 2          10       2000      11.666667 0.8571429 0.4110333  1.576316</span></span>
+<span><span class="co">## 3          20       3000      17.500000 1.1428571 0.6980868  1.765050</span></span>
+<span><span class="co">##             smr_ci_flag</span></span>
+<span><span class="co">## 1 not_clearly_different</span></span>
+<span><span class="co">## 2 not_clearly_different</span></span>
+<span><span class="co">## 3 not_clearly_different</span></span></code></pre>
+</div>
+<div class="section level2">
+<h2 id="location-quotient-style-workflows">Location quotient style workflows<a class="anchor" aria-label="anchor" href="#location-quotient-style-workflows"></a>
+</h2>
+<p><code><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient()</a></code> is currently included as a
+comparative rate helper.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>  observed_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  denominator_col <span class="op">=</span> <span class="st">"population"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   event_count population  local_rate location_quotient</span></span>
+<span><span class="co">## 1           5       1000 0.005000000         0.8571429</span></span>
+<span><span class="co">## 2          10       2000 0.005000000         0.8571429</span></span>
+<span><span class="co">## 3          20       3000 0.006666667         1.1428571</span></span></code></pre>
+<p>This function is under review because its current behaviour overlaps
+conceptually with SMR-style comparative rate workflows.</p>
+</div>
+<div class="section level2">
+<h2 id="distinctive-category-workflows">Distinctive category workflows<a class="anchor" aria-label="anchor" href="#distinctive-category-workflows"></a>
+</h2>
+<p>Future versions of <code>riskworkflowr</code> are planned to support
+grouped comparative SMR workflows for identifying comparatively
+distinctive risk categories within spatial units.</p>
+<p>This workflow is intended to support analyses such as:</p>
+<ul>
+<li>dominant injury mechanisms</li>
+<li>distinctive incident types</li>
+<li>leading environmental hazards</li>
+<li>category-based comparative risk profiles</li>
+</ul>
+<p>The planned workflow will likely use data containing:</p>
+<pre class="text"><code><span><span class="va">unit_id</span></span>
+<span><span class="va">category</span></span>
+<span><span class="va">event_count</span></span>
+<span><span class="va">denominator</span></span></code></pre>
+<p>and return fields such as:</p>
+<pre class="text"><code><span><span class="va">highest_smr_category</span></span>
+<span><span class="va">highest_smr</span></span>
+<span><span class="va">highest_event_count</span></span>
+<span><span class="va">lowest_smr_category</span></span>
+<span><span class="va">lowest_smr</span></span>
+<span><span class="va">lowest_event_count</span></span></code></pre>
+<p>This functionality is currently under active design and
+methodological review.</p>
+</div>
+<div class="section level2">
+<h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>
+</h2>
+<p>Risk metric workflows assume:</p>
+<ul>
+<li>event counts are suitable for the intended analysis</li>
+<li>denominators are appropriate and interpretable</li>
+<li>spatial units are meaningful for the question being asked</li>
+<li>low counts and small denominators are interpreted carefully</li>
+<li>outputs are reviewed alongside context and data quality</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="limitations-and-pitfalls">Limitations and pitfalls<a class="anchor" aria-label="anchor" href="#limitations-and-pitfalls"></a>
+</h2>
+<p>Potential limitations include:</p>
+<ul>
+<li>unstable rates in small areas</li>
+<li>misleading interpretation of rare events</li>
+<li>denominator uncertainty</li>
+<li>inconsistent event coding</li>
+<li>ecological interpretation risks</li>
+<li>overinterpretation of exploratory outputs</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="alternative-approaches">Alternative approaches<a class="anchor" aria-label="anchor" href="#alternative-approaches"></a>
+</h2>
+<p>Depending on the analytical objective and available data, alternative
+methods may include:</p>
+<ul>
+<li>direct standardisation</li>
+<li>indirect standardisation</li>
+<li>age-sex stratified SMR</li>
+<li>Bayesian smoothing</li>
+<li>empirical Bayes methods</li>
+<li>Poisson or negative binomial regression</li>
+<li>spatial regression</li>
+<li>cluster detection methods</li>
+<li>hierarchical models</li>
+</ul>
+<p>These methods may be preferable where sufficient covariate
+information, stable denominators, or specific inferential objectives
+exist.</p>
+</div>
+<div class="section level2">
+<h2 id="future-development">Future development<a class="anchor" aria-label="anchor" href="#future-development"></a>
+</h2>
+<p>Future development priorities include:</p>
+<ul>
+<li>grouped/category SMR workflows</li>
+<li>clearer distinction between SMR and location quotient style
+calculations</li>
+<li>category dominance outputs for mapping</li>
+<li>optional low-count thresholds</li>
+<li>clearer interpretation flags</li>
+<li>enhanced examples and visual outputs</li>
+</ul>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

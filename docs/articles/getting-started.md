@@ -17,6 +17,20 @@ The package is designed to support consistent workflows across:
 - custom areal units
 - H3 hexagonal grids
 
+## Why riskworkflowr?
+
+Many spatial risk workflows require analysts to repeatedly combine:
+
+- spatial joins
+- event aggregation
+- comparative risk metrics
+- choropleth mapping
+- reproducible analytical workflows
+
+`riskworkflowr` aims to provide a consistent framework for these
+commonly repeated tasks while remaining compatible with the broader R
+spatial ecosystem.
+
 ## Core workflow
 
 ``` text
@@ -26,6 +40,19 @@ point events
 → risk metrics
 → mapping
 ```
+
+A core design principle of the package is:
+
+``` text
+"units are units"
+```
+
+The same analytical workflow should operate consistently across:
+
+- administrative boundaries
+- custom polygons
+- H3 hexagonal grids
+- other areal unit systems
 
 ## Install package
 
@@ -86,6 +113,16 @@ risk_calc_smr(
     ## 1 not_clearly_different
     ## 2 not_clearly_different
     ## 3 not_clearly_different
+
+## Methodological scope
+
+The package primarily focuses on practical and reproducible workflows
+for exploratory spatial risk analysis and communication.
+
+The implemented methods should not be interpreted as replacing more
+advanced epidemiological, spatial statistical, or inferential modelling
+approaches where such methods are appropriate and supported by the
+available data.
 
 ## Important assumptions
 
