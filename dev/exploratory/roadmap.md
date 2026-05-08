@@ -14,6 +14,7 @@
 10. Add workflow diagrams.
 11. Improve formal citation of applied methods, assumptions, limitations, and alternative/future methods.
 12. Add badges, logo, pkgdown polish, and NEWS.md.
+13. Improve explanation and communication of spatial join modes, especially "intersect_nearest".
 
 ## Methods to cite later
 

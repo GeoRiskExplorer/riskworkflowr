@@ -10,13 +10,32 @@ home:
     and H3 hexagonal grids.
 
 navbar:
-  structure:
-    left:
-      - intro
-      - articles
-      - reference
-    right:
-      - github
+  left:
+    - text: "Articles"
+      menu:
+        - text: "Getting Started"
+          href: articles/getting-started.html
+        - text: "Spatial Assignment"
+          href: articles/spatial-assignment.html
+        - text: "Counts and Aggregation"
+          href: articles/counts-and-aggregation.html
+        - text: "Risk Metrics"
+          href: articles/risk-metrics.html
+        - text: "SMR Analysis"
+          href: articles/smr-analysis.html
+        - text: "H3 and Hexagonal Workflows"
+          href: articles/h3-and-hex-workflows.html
+        - text: "Risk Mapping"
+          href: articles/risk-mapping.html
+        - text: "Package Philosophy"
+          href: articles/package-philosophy.html
+
+    - text: "Reference"
+      href: reference/index.html
+
+  right:
+    - icon: fa-github
+      href: https://github.com/GeoRiskExplorer/riskworkflowr
 
 reference:
   - title: "Spatial Workflow"
@@ -43,24 +62,3 @@ reference:
       - example_lga_analysis
       - example_hex_analysis
 
-articles:
-  - title: "Getting Started"
-    navbar: ~
-    contents:
-      - getting-started
-
-  - title: "Core Workflows"
-    contents:
-      - spatial-assignment
-      - counts-and-aggregation
-      - risk-metrics
-      - smr-analysis
-
-  - title: "Advanced Workflows"
-    contents:
-      - h3-and-hex-workflows
-      - risk-mapping
-
-  - title: "Concepts"
-    contents:
-      - package-philosophy
