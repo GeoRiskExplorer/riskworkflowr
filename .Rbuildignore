@@ -6,3 +6,4 @@
 ^dev$
 ^notes$
 ^outputs$
+^README\.Rmd$
