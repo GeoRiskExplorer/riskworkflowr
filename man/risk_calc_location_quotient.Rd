@@ -39,6 +39,19 @@ rate. This follows the general approach used by Boscoe and Pradhan (2015),
 who mapped the most distinctive cause of death by comparing state-specific
 age-adjusted mortality rates with national age-adjusted mortality rates.
 }
+\examples{
+data <- data.frame(
+  event_count = c(5, 10, 20),
+  population = c(1000, 2000, 3000)
+)
+
+risk_calc_location_quotient(
+  data = data,
+  observed_col = "event_count",
+  denominator_col = "population"
+)
+
+}
 \references{
 Boscoe FP, Pradhan E. The Most Distinctive Causes of Death by State,
 2001–2010. Preventing Chronic Disease. 2015;12:E75.

@@ -21,15 +21,17 @@
 #' @return A data frame containing event counts by unit.
 #'
 #' @examples
-#' \dontrun{
-#' counts <- risk_count_units(
-#'   data = joined_sf,
-#'   unit_id_col = "hex_id",
-#'   count_col = "event_count"
+#' data <- data.frame(
+#'   unit_id = c("A", "A", "B", "C", "C", "C")
 #' )
-#' }
+#'
+#' risk_count_units(
+#'   data = data,
+#'   unit_id_col = "unit_id"
+#' )
 #'
 #' @export
+#' 
 risk_count_units <- function(
   data,
   unit_id_col,

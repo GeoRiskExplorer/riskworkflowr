@@ -17,6 +17,23 @@
 #'
 #' @return An sf object with counts joined to the input units.
 #'
+#' @examples
+#' units <- data.frame(
+#'   unit_id = c("A", "B", "C"),
+#'   unit_name = c("Area A", "Area B", "Area C")
+#' )
+#'
+#' counts <- data.frame(
+#'   unit_id = c("A", "C"),
+#'   event_count = c(3, 7)
+#' )
+#'
+#' risk_join_counts(
+#'   units = units,
+#'   counts = counts,
+#'   unit_id_col = "unit_id"
+#' )
+#'
 #' @export
 
 risk_join_counts <- function(

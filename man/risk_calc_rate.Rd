@@ -39,3 +39,16 @@ column, with a user-defined multiplier.
 For example, with \code{multiplier = 10000}, the function calculates events per
 10,000 population or exposure units.
 }
+\examples{
+data <- data.frame(
+  event_count = c(5, 10, 15),
+  population = c(1000, 2000, 3000)
+)
+
+risk_calc_rate(
+  data = data,
+  count_col = "event_count",
+  denominator_col = "population"
+)
+
+}

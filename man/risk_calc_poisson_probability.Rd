@@ -52,4 +52,17 @@ where \eqn{\lambda} is the average event count for the target period.
 \references{
 Standard Poisson probability relationships commonly used in epidemiological
 and event-frequency modelling.
+
+#' @examples
+data <- data.frame(
+event_count = c(1, 5, 10),
+years = c(1, 2, 5)
+)
+
+risk_calc_poisson_probability(
+data = data,
+count_col = "event_count",
+period_col = "years",
+output = "both"
+)
 }

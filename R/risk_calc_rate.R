@@ -21,6 +21,18 @@
 #'
 #' @return Input data with an added rate column.
 #'
+#' @examples
+#' data <- data.frame(
+#'   event_count = c(5, 10, 15),
+#'   population = c(1000, 2000, 3000)
+#' )
+#'
+#' risk_calc_rate(
+#'   data = data,
+#'   count_col = "event_count",
+#'   denominator_col = "population"
+#' )
+#' 
 #' @export
 
 risk_calc_rate <- function(

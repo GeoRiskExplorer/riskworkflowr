@@ -34,3 +34,21 @@ An sf object with counts joined to the input units.
 Joins a count table back to polygon or hexbin units and optionally replaces
 missing count values with a chosen value, usually zero.
 }
+\examples{
+units <- data.frame(
+  unit_id = c("A", "B", "C"),
+  unit_name = c("Area A", "Area B", "Area C")
+)
+
+counts <- data.frame(
+  unit_id = c("A", "C"),
+  event_count = c(3, 7)
+)
+
+risk_join_counts(
+  units = units,
+  counts = counts,
+  unit_id_col = "unit_id"
+)
+
+}

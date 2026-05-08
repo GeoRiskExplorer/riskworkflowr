@@ -20,8 +20,21 @@
 #' Boscoe FP, Pradhan E. The Most Distinctive Causes of Death by State,
 #' 2001–2010. Preventing Chronic Disease. 2015;12:E75.
 #' doi:10.5888/pcd12.140395.
+#' 
+#' @examples
+#' data <- data.frame(
+#'   event_count = c(5, 10, 20),
+#'   population = c(1000, 2000, 3000)
+#' )
+#'
+#' risk_calc_location_quotient(
+#'   data = data,
+#'   observed_col = "event_count",
+#'   denominator_col = "population"
+#' )
 #'
 #' @export
+
 risk_calc_location_quotient <- function(
   data,
   observed_col = "event_count",

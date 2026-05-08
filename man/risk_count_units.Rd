@@ -36,12 +36,13 @@ already been assigned to administrative areas, statistical regions, sites,
 or grid systems using a spatial join workflow such as \code{\link[=sj_join]{sj_join()}}.
 }
 \examples{
-\dontrun{
-counts <- risk_count_units(
-  data = joined_sf,
-  unit_id_col = "hex_id",
-  count_col = "event_count"
+data <- data.frame(
+  unit_id = c("A", "A", "B", "C", "C", "C")
 )
-}
+
+risk_count_units(
+  data = data,
+  unit_id_col = "unit_id"
+)
 
 }

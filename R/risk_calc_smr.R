@@ -31,6 +31,18 @@
 #' Poisson confidence interval approaches commonly used in epidemiological
 #' small-area and rare-event analysis.
 #'
+#' #' @examples
+#' data <- data.frame(
+#'   event_count = c(5, 10, 20),
+#'   population = c(1000, 2000, 3000)
+#' )
+#'
+#' risk_calc_smr(
+#'   data = data,
+#'   observed_col = "event_count",
+#'   denominator_col = "population"
+#' )
+#' 
 #' @export
 
 risk_calc_smr <- function(
