@@ -1,0 +1,27 @@
+Package: riskworkflowr
+Title: Spatial Risk Workflow Tools
+Version: 0.0.0.9000
+Authors@R: 
+    person("Robert", "Andronaco", email = "your.email@example.com", role = c("aut", "cre"))
+Description: Tools for preparing, assigning, aggregating, calculating, and mapping spatial risk measures using event, exposure, and polygon unit data.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports:
+    classInt,
+    dplyr,
+    ggplot2,
+    RColorBrewer,
+    sf,
+    stats,
+    tools
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown
+Config/testthat/edition: 3
+Depends: 
+    R (>= 3.5)
+LazyData: true
+
