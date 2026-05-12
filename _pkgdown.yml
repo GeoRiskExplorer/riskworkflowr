@@ -33,13 +33,13 @@ navbar:
     - text: "Reference"
       href: reference/index.html
 
+    - text: "News"
+      href: news/index.html
+
   right:
     - icon: fa-github
       aria-label: GitHub
       href: https://github.com/GeoRiskExplorer/riskworkflowr
-
-    - text: "News"
-      href: news/index.html 
 
 reference:
   - title: "Spatial Workflow"
