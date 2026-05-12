@@ -119,7 +119,7 @@ risk_distinct_category(
 #>   unit_id highest_category highest_smr highest_event_count lowest_category
 #> 1       A            Falls    1.384615                  10           Water
 #> 2       B            Water    1.800000                   8           Falls
-#>   lowest_smr lowest_event_count category_count_used low_count_flag
-#> 1  0.3600000                  2                   2          FALSE
-#> 2  0.5192308                  3                   2          FALSE
+#>   lowest_smr lowest_event_count category_count_used insufficient_count_flag
+#> 1  0.3600000                  2                   2                   FALSE
+#> 2  0.5192308                  3                   2                   FALSE
 ```

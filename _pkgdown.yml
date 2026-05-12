@@ -38,6 +38,9 @@ navbar:
       aria-label: GitHub
       href: https://github.com/GeoRiskExplorer/riskworkflowr
 
+    - text: "News"
+      href: news/index.html 
+
 reference:
   - title: "Spatial Workflow"
     contents:
