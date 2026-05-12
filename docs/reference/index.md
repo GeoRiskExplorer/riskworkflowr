@@ -21,6 +21,8 @@
   : Calculate Poisson probability of one or more events
 - [`risk_calc_smr()`](https://GeoRiskExplorer.github.io/riskworkflowr/reference/risk_calc_smr.md)
   : Calculate Standardised Mortality Ratio (SMR)
+- [`risk_distinct_category()`](https://GeoRiskExplorer.github.io/riskworkflowr/reference/risk_distinct_category.md)
+  : Identify distinctive risk categories by spatial unit
 - [`risk_calc_location_quotient()`](https://GeoRiskExplorer.github.io/riskworkflowr/reference/risk_calc_location_quotient.md)
   : Calculate a location quotient / distinctive risk ratio
 

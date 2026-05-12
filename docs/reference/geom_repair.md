@@ -1,8 +1,8 @@
 # Repair invalid geometry for spatial processing
 
 Repairs invalid geometries using
-[`sf::st_make_valid()`](https://r-spatial.github.io/sf/reference/valid.html)
-so downstream spatial predicates and joins behave more reliably.
+[`sf::st_make_valid()`](https://rdrr.io/pkg/sf/man/valid.html) so
+downstream spatial predicates and joins behave more reliably.
 
 ## Usage
 
