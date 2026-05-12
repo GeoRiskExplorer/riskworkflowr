@@ -35,20 +35,28 @@ Joins a count table back to polygon or hexbin units and optionally replaces
 missing count values with a chosen value, usually zero.
 }
 \examples{
-units <- data.frame(
-  unit_id = c("A", "B", "C"),
-  unit_name = c("Area A", "Area B", "Area C")
-)
+if (requireNamespace("sf", quietly = TRUE)) {
+  units <- sf::st_sf(
+    unit_id = c("A", "B", "C"),
+    unit_name = c("Area A", "Area B", "Area C"),
+    geometry = sf::st_sfc(
+      sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0)))),
+      sf::st_polygon(list(rbind(c(1, 0), c(2, 0), c(2, 1), c(1, 1), c(1, 0)))),
+      sf::st_polygon(list(rbind(c(2, 0), c(3, 0), c(3, 1), c(2, 1), c(2, 0))))
+    ),
+    crs = 4326
+  )
 
-counts <- data.frame(
-  unit_id = c("A", "C"),
-  event_count = c(3, 7)
-)
+  counts <- data.frame(
+    unit_id = c("A", "C"),
+    event_count = c(3, 7)
+  )
 
-risk_join_counts(
-  units = units,
-  counts = counts,
-  unit_id_col = "unit_id"
-)
+  risk_join_counts(
+    units = units,
+    counts = counts,
+    unit_id_col = "unit_id"
+  )
+}
 
 }
