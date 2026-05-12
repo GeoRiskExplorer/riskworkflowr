@@ -50,7 +50,7 @@ risk_distinct_category(
 \value{
 A data frame with one row per unit and distinctive category outputs.
 
-#' The \code{insufficient_count_flag} column is \code{TRUE} where no category within
+The \code{insufficient_count_flag} column is \code{TRUE} where no category within
 a unit met the minimum count threshold set by \code{min_count}.
 }
 \description{
@@ -80,4 +80,9 @@ risk_distinct_category(
   denominator_col = "exposure"
 )
 
+}
+\references{
+Boscoe, F. P., & Pradhan, E. (2015). The Most Distinctive Causes
+of Death by State, 2001–2010. Preventing Chronic Disease, 12, E75.
+https://doi.org/10.5888/pcd12.140395
 }

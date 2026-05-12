@@ -82,8 +82,8 @@ risk_distinct_category(
 
 A data frame with one row per unit and distinctive category outputs.
 
-\#' The `insufficient_count_flag` column is `TRUE` where no category
-within a unit met the minimum count threshold set by `min_count`.
+The `insufficient_count_flag` column is `TRUE` where no category within
+a unit met the minimum count threshold set by `min_count`.
 
 ## Details
 
@@ -93,6 +93,12 @@ observed-versus-expected value within each spatial unit.
 
 Results should be interpreted carefully where counts are low,
 denominators are unstable, or categories are inconsistently coded.
+
+## References
+
+Boscoe, F. P., & Pradhan, E. (2015). The Most Distinctive Causes of
+Death by State, 2001–2010. Preventing Chronic Disease, 12, E75.
+https://doi.org/10.5888/pcd12.140395
 
 ## Examples
 
@@ -113,7 +119,7 @@ risk_distinct_category(
 #>   unit_id highest_category highest_smr highest_event_count lowest_category
 #> 1       A            Falls    1.384615                  10           Water
 #> 2       B            Water    1.800000                   8           Falls
-#>   lowest_smr lowest_event_count category_count_used insufficient_count_flag
-#> 1  0.3600000                  2                   2                   FALSE
-#> 2  0.5192308                  3                   2                   FALSE
+#>   lowest_smr lowest_event_count category_count_used low_count_flag
+#> 1  0.3600000                  2                   2          FALSE
+#> 2  0.5192308                  3                   2          FALSE
 ```

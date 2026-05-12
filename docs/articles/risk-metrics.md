@@ -105,63 +105,47 @@ risk_calc_smr(
     ## 2 not_clearly_different
     ## 3 not_clearly_different
 
-## Location quotient style workflows
+## Distinctive category workflows
 
-[`risk_calc_location_quotient()`](https://GeoRiskExplorer.github.io/riskworkflowr/reference/risk_calc_location_quotient.md)
-is currently included as a comparative rate helper.
+[`risk_distinct_category()`](https://GeoRiskExplorer.github.io/riskworkflowr/reference/risk_distinct_category.md)
+supports grouped/category comparative risk profiling.
+
+It is intended for datasets where events are grouped by both spatial
+unit and category, such as injury mechanism, incident type, hazard
+class, or activity type.
 
 ``` r
 
-risk_calc_location_quotient(
-  data = data,
+category_data <- data.frame(
+  unit_id = c("A", "A", "B", "B"),
+  category = c("Falls", "Water", "Falls", "Water"),
+  event_count = c(10, 2, 3, 8),
+  population = c(1000, 1000, 800, 800)
+)
+
+risk_distinct_category(
+  data = category_data,
+  unit_id_col = "unit_id",
+  category_col = "category",
   observed_col = "event_count",
-  denominator_col = "population"
+  denominator_col = "population",
+  min_count = 1
 )
 ```
 
-    ##   event_count population  local_rate location_quotient
-    ## 1           5       1000 0.005000000         0.8571429
-    ## 2          10       2000 0.005000000         0.8571429
-    ## 3          20       3000 0.006666667         1.1428571
+    ##   unit_id highest_category highest_smr highest_event_count lowest_category
+    ## 1       A            Falls    1.384615                  10           Water
+    ## 2       B            Water    1.800000                   8           Falls
+    ##   lowest_smr lowest_event_count category_count_used low_count_flag
+    ## 1  0.3600000                  2                   2          FALSE
+    ## 2  0.5192308                  3                   2          FALSE
 
-This function is under review because its current behaviour overlaps
-conceptually with SMR-style comparative rate workflows.
+The output identifies the highest comparative category for each unit
+and, optionally, the lowest comparative category.
 
-## Distinctive category workflows
-
-Future versions of `riskworkflowr` are planned to support grouped
-comparative SMR workflows for identifying comparatively distinctive risk
-categories within spatial units.
-
-This workflow is intended to support analyses such as:
-
-- dominant injury mechanisms
-- distinctive incident types
-- leading environmental hazards
-- category-based comparative risk profiles
-
-The planned workflow will likely use data containing:
-
-``` text
-unit_id
-category
-event_count
-denominator
-```
-
-and return fields such as:
-
-``` text
-highest_smr_category
-highest_smr
-highest_event_count
-lowest_smr_category
-lowest_smr
-lowest_event_count
-```
-
-This functionality is currently under active design and methodological
-review.
+This workflow is intended for exploratory spatial risk profiling and
+should be interpreted carefully where counts are low, denominators are
+unstable, or categories are inconsistently coded.
 
 ## Assumptions
 

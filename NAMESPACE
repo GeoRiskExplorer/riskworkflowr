@@ -3,7 +3,6 @@
 export(geom_repair)
 export(map_risk_choropleth)
 export(risk_build_counts)
-export(risk_calc_location_quotient)
 export(risk_calc_poisson_probability)
 export(risk_calc_rate)
 export(risk_calc_smr)

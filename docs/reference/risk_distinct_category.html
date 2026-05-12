@@ -126,7 +126,7 @@ the highest and optionally lowest distinctive category for each unit.</p>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A data frame with one row per unit and distinctive category outputs.</p>
-<p>#' The <code>insufficient_count_flag</code> column is <code>TRUE</code> where no category within
+<p>The <code>insufficient_count_flag</code> column is <code>TRUE</code> where no category within
 a unit met the minimum count threshold set by <code>min_count</code>.</p>
     </div>
     <div class="section level2">
@@ -136,6 +136,12 @@ risk profiling. It identifies categories with the highest relative
 observed-versus-expected value within each spatial unit.</p>
 <p>Results should be interpreted carefully where counts are low,
 denominators are unstable, or categories are inconsistently coded.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
+    <p>Boscoe, F. P., &amp; Pradhan, E. (2015). The Most Distinctive Causes
+of Death by State, 2001–2010. Preventing Chronic Disease, 12, E75.
+https://doi.org/10.5888/pcd12.140395</p>
     </div>
 
     <div class="section level2">
@@ -156,9 +162,9 @@ denominators are unstable, or categories are inconsistently coded.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   unit_id highest_category highest_smr highest_event_count lowest_category</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1       A            Falls    1.384615                  10           Water</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2       B            Water    1.800000                   8           Falls</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   lowest_smr lowest_event_count category_count_used insufficient_count_flag</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3600000                  2                   2                   FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.5192308                  3                   2                   FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   lowest_smr lowest_event_count category_count_used low_count_flag</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0.3600000                  2                   2          FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  0.5192308                  3                   2          FALSE</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

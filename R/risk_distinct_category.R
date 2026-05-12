@@ -19,7 +19,7 @@
 #'
 #' @return A data frame with one row per unit and distinctive category outputs.
 #' 
-#' #' The `insufficient_count_flag` column is `TRUE` where no category within
+#' The `insufficient_count_flag` column is `TRUE` where no category within
 #' a unit met the minimum count threshold set by `min_count`.
 #'
 #' @details
@@ -29,6 +29,12 @@
 #'
 #' Results should be interpreted carefully where counts are low,
 #' denominators are unstable, or categories are inconsistently coded.
+#' 
+#' @references
+#' Boscoe, F. P., & Pradhan, E. (2015). The Most Distinctive Causes
+#' of Death by State, 2001–2010. Preventing Chronic Disease, 12, E75.
+#' https://doi.org/10.5888/pcd12.140395
+#' 
 #'
 #' @examples
 #' data <- data.frame(

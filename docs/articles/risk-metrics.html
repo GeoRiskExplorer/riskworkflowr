@@ -77,7 +77,7 @@ calculating commonly used spatial risk metrics.</p>
 <pre class="text"><code><span><span class="fu"><a href="../reference/risk_calc_rate.html">risk_calc_rate</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/risk_calc_poisson_probability.html">risk_calc_poisson_probability</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/risk_calc_smr.html">risk_calc_smr</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
+<span><span class="fu"><a href="https://rdrr.io/pkg/riskworkflowr/man/risk_calc_location_quotient.html" class="external-link">risk_calc_location_quotient</a></span><span class="op">(</span><span class="op">)</span></span></code></pre>
 <p>These functions are intended to support transparent and reproducible
 analytical workflows rather than replace specialist epidemiological or
 spatial statistical methods.</p>
@@ -154,50 +154,40 @@ where an appropriate denominator is available.</p>
 <span><span class="co">## 3 not_clearly_different</span></span></code></pre>
 </div>
 <div class="section level2">
-<h2 id="location-quotient-style-workflows">Location quotient style workflows<a class="anchor" aria-label="anchor" href="#location-quotient-style-workflows"></a>
-</h2>
-<p><code><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient()</a></code> is currently included as a
-comparative rate helper.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/risk_calc_location_quotient.html">risk_calc_location_quotient</a></span><span class="op">(</span></span>
-<span>  data <span class="op">=</span> <span class="va">data</span>,</span>
-<span>  observed_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
-<span>  denominator_col <span class="op">=</span> <span class="st">"population"</span></span>
-<span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">##   event_count population  local_rate location_quotient</span></span>
-<span><span class="co">## 1           5       1000 0.005000000         0.8571429</span></span>
-<span><span class="co">## 2          10       2000 0.005000000         0.8571429</span></span>
-<span><span class="co">## 3          20       3000 0.006666667         1.1428571</span></span></code></pre>
-<p>This function is under review because its current behaviour overlaps
-conceptually with SMR-style comparative rate workflows.</p>
-</div>
-<div class="section level2">
 <h2 id="distinctive-category-workflows">Distinctive category workflows<a class="anchor" aria-label="anchor" href="#distinctive-category-workflows"></a>
 </h2>
-<p>Future versions of <code>riskworkflowr</code> are planned to support
-grouped comparative SMR workflows for identifying comparatively
-distinctive risk categories within spatial units.</p>
-<p>This workflow is intended to support analyses such as:</p>
-<ul>
-<li>dominant injury mechanisms</li>
-<li>distinctive incident types</li>
-<li>leading environmental hazards</li>
-<li>category-based comparative risk profiles</li>
-</ul>
-<p>The planned workflow will likely use data containing:</p>
-<pre class="text"><code><span><span class="va">unit_id</span></span>
-<span><span class="va">category</span></span>
-<span><span class="va">event_count</span></span>
-<span><span class="va">denominator</span></span></code></pre>
-<p>and return fields such as:</p>
-<pre class="text"><code><span><span class="va">highest_smr_category</span></span>
-<span><span class="va">highest_smr</span></span>
-<span><span class="va">highest_event_count</span></span>
-<span><span class="va">lowest_smr_category</span></span>
-<span><span class="va">lowest_smr</span></span>
-<span><span class="va">lowest_event_count</span></span></code></pre>
-<p>This functionality is currently under active design and
-methodological review.</p>
+<p><code><a href="../reference/risk_distinct_category.html">risk_distinct_category()</a></code> supports grouped/category
+comparative risk profiling.</p>
+<p>It is intended for datasets where events are grouped by both spatial
+unit and category, such as injury mechanism, incident type, hazard
+class, or activity type.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">category_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  unit_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span><span class="op">)</span>,</span>
+<span>  category <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Falls"</span>, <span class="st">"Water"</span>, <span class="st">"Falls"</span>, <span class="st">"Water"</span><span class="op">)</span>,</span>
+<span>  event_count <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">8</span><span class="op">)</span>,</span>
+<span>  population <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1000</span>, <span class="fl">1000</span>, <span class="fl">800</span>, <span class="fl">800</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/risk_distinct_category.html">risk_distinct_category</a></span><span class="op">(</span></span>
+<span>  data <span class="op">=</span> <span class="va">category_data</span>,</span>
+<span>  unit_id_col <span class="op">=</span> <span class="st">"unit_id"</span>,</span>
+<span>  category_col <span class="op">=</span> <span class="st">"category"</span>,</span>
+<span>  observed_col <span class="op">=</span> <span class="st">"event_count"</span>,</span>
+<span>  denominator_col <span class="op">=</span> <span class="st">"population"</span>,</span>
+<span>  min_count <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">##   unit_id highest_category highest_smr highest_event_count lowest_category</span></span>
+<span><span class="co">## 1       A            Falls    1.384615                  10           Water</span></span>
+<span><span class="co">## 2       B            Water    1.800000                   8           Falls</span></span>
+<span><span class="co">##   lowest_smr lowest_event_count category_count_used low_count_flag</span></span>
+<span><span class="co">## 1  0.3600000                  2                   2          FALSE</span></span>
+<span><span class="co">## 2  0.5192308                  3                   2          FALSE</span></span></code></pre>
+<p>The output identifies the highest comparative category for each unit
+and, optionally, the lowest comparative category.</p>
+<p>This workflow is intended for exploratory spatial risk profiling and
+should be interpreted carefully where counts are low, denominators are
+unstable, or categories are inconsistently coded.</p>
 </div>
 <div class="section level2">
 <h2 id="assumptions">Assumptions<a class="anchor" aria-label="anchor" href="#assumptions"></a>

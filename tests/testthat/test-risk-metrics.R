@@ -75,24 +75,3 @@ test_that("risk_calc_smr returns expected SMR fields", {
 
 })
 
-# 00004 — risk_calc_location_quotient() ------------------------------------
-
-test_that("risk_calc_location_quotient returns LQ fields", {
-
-  x <- data.frame(
-    event_count = c(5, 10, 0),
-    exposure = c(100, 200, 100)
-  )
-
-  result <- risk_calc_location_quotient(
-    data = x,
-    observed_col = "event_count",
-    denominator_col = "exposure"
-  )
-
-  expect_true("location_quotient" %in% names(result))
-  expect_true("local_rate" %in% names(result))
-
-  expect_true(all(result$local_rate >= 0, na.rm = TRUE))
-
-})
