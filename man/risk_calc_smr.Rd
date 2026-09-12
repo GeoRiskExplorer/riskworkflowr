@@ -30,9 +30,9 @@ risk_calc_smr(
 
 \item{smr_col}{Name of SMR output column.}
 
-\item{global_rate_col}{Name of global reference rate output column.}
+\item{global_rate_col}{Optional name of global reference rate output column.}
 
-\item{ci_method}{Confidence interval method. Currently supports \code{"exact"}.}
+\item{ci_method}{Confidence interval method. One of \code{"exact"} or \code{"none"}.}
 
 \item{conf_level}{Confidence level for intervals.}
 
@@ -47,29 +47,47 @@ zero, or negative.}
 }
 \value{
 Input data with expected counts, SMR values, and optional confidence
-intervals added.
+interval columns added.
 }
 \description{
 Calculates expected counts and Standardised Mortality Ratios (SMR) using a
 global reference rate derived from the input dataset.
 }
 \details{
-Optional confidence intervals are calculated using Poisson-based methods,
-appropriate for rare-event and small-area analysis.
-}
-\references{
-Poisson confidence interval approaches commonly used in epidemiological
-small-area and rare-event analysis.
+The global reference rate is calculated as:
 
-#' @examples
+\code{sum(observed) / sum(denominator)}
+
+Expected counts are then calculated for each row as:
+
+\verb{denominator * global reference rate}
+
+and SMR as:
+
+\code{observed / expected}
+
+Optional exact confidence intervals are calculated from the Poisson
+distribution for the observed event count.
+
+Observed counts must be numeric, finite, and non-negative. When
+\code{ci_method = "exact"}, observed counts must also be whole numbers because
+the interval is based on an exact Poisson count model.
+
+Denominators must be numeric, finite, and non-negative.
+
+Missing observed or denominator values are permitted and propagate to
+row-level derived values.
+}
+\examples{
 data <- data.frame(
-event_count = c(5, 10, 20),
-population = c(1000, 2000, 3000)
+  event_count = c(5, 10, 20),
+  population = c(1000, 2000, 3000)
 )
 
 risk_calc_smr(
-data = data,
-observed_col = "event_count",
-denominator_col = "population"
+  data = data,
+  observed_col = "event_count",
+  denominator_col = "population"
 )
+
 }

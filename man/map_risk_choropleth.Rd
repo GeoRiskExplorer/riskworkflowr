@@ -2,7 +2,7 @@
 % Please edit documentation in R/map_risk_choropleth.R
 \name{map_risk_choropleth}
 \alias{map_risk_choropleth}
-\title{Create a classed choropleth risk map}
+\title{Create a choropleth risk map}
 \usage{
 map_risk_choropleth(
   data,
@@ -21,26 +21,28 @@ map_risk_choropleth(
 )
 }
 \arguments{
-\item{data}{An sf object.}
+\item{data}{An \code{sf} object.}
 
 \item{fill_col}{Name of the variable to map.}
 
-\item{map_type}{Type of mapped variable. Used to select default palettes and
-classification behaviour.}
+\item{map_type}{Type of mapped variable: \code{"count"}, \code{"rate"},
+\code{"probability"}, \code{"smr"}, or \code{"category"}.}
 
-\item{classification}{Classification method.}
+\item{classification}{Classification method. Defaults are selected from
+\code{map_type}. Supported values are \code{"quantile"}, \code{"equal_interval"},
+\code{"jenks"}, \code{"pretty"}, \code{"smr_default"}, and \code{"none"}.}
 
-\item{n_classes}{Number of classes for classified maps.}
+\item{n_classes}{Number of classes for classified numeric maps.}
 
-\item{palette}{Colour palette name.}
+\item{palette}{RColorBrewer palette name.}
 
-\item{reverse_palette}{Logical; if TRUE, reverse palette direction.}
+\item{reverse_palette}{Logical; if \code{TRUE}, reverse palette direction.}
 
 \item{title}{Optional plot title.}
 
 \item{subtitle}{Optional plot subtitle.}
 
-\item{fill_label}{Legend label.}
+\item{fill_label}{Legend label. Defaults to \code{fill_col}.}
 
 \item{border_colour}{Polygon border colour.}
 
@@ -49,16 +51,28 @@ classification behaviour.}
 \item{na_colour}{Colour used for missing values.}
 }
 \value{
-A ggplot object.
+A \code{ggplot} object.
 }
 \description{
-Creates a choropleth map for areal units or hexbins using classed colour
-schemes and cartographic defaults appropriate for spatial risk analysis.
+Creates a choropleth map for areal units or hexbins using classed or
+continuous colour schemes suitable for spatial risk analysis.
 }
 \details{
-Supports sequential, diverging, and qualitative colour schemes using
-Cynthia Brewer-style palettes through \code{RColorBrewer}.
+For numeric map types, \code{classification = "none"} produces a continuous
+colour scale. Classified numeric maps produce discrete classes.
+
+\code{map_type = "category"} requires categorical data and defaults to
+\code{classification = "none"} with a qualitative Brewer palette.
+
+The default SMR classification uses:
+\itemize{
+\item \code{0}
+\item \verb{>0-0.75}
+\item \code{0.75-1.25}
+\item \code{1.25-2}
+\item \verb{>2}
+}
 }
 \references{
-Brewer CA. Designing Better Maps: A Guide for GIS Users.
+Brewer, C. A. Designing Better Maps: A Guide for GIS Users.
 }

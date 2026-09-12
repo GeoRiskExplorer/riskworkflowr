@@ -9,7 +9,8 @@ risk_build_counts(
   units,
   unit_id_col,
   unit_name_col = NULL,
-  join_mode = "intersect_nearest",
+  join_mode = c("intersect", "nearest", "intersect_nearest"),
+  max_distance_m = NULL,
   count_col = "event_count",
   missing_count_value = 0,
   repair_units = TRUE,
@@ -17,32 +18,43 @@ risk_build_counts(
 )
 }
 \arguments{
-\item{points}{An sf point object.}
+\item{points}{An sf POINT object.}
 
-\item{units}{An sf polygon or hexbin object.}
+\item{units}{An sf POLYGON or MULTIPOLYGON object.}
 
-\item{unit_id_col}{Name of the unit identifier column.}
+\item{unit_id_col}{Name of the unique unit identifier column.}
 
 \item{unit_name_col}{Optional unit name column.}
 
-\item{join_mode}{Spatial join mode passed to \code{\link[=sj_join]{sj_join()}}.}
+\item{join_mode}{Spatial assignment mode passed to \code{\link[=sj_join]{sj_join()}}.}
+
+\item{max_distance_m}{Optional maximum nearest-assignment distance in metres.}
 
 \item{count_col}{Name of the output count column.}
 
-\item{missing_count_value}{Value used for units with no events.}
+\item{missing_count_value}{Value used for units with no assigned events.}
 
-\item{repair_units}{Logical; if TRUE, repair unit geometry before spatial joins.}
+\item{repair_units}{Logical; if TRUE, repair unit geometry before spatial
+assignment and return repaired geometry.}
 
 \item{return}{Return \code{"units"} for counted units only, or \code{"all"} for a list
-containing joined points, counts, and counted units.}
+containing joined points, represented-unit counts, and complete counted
+units.}
 }
 \value{
 An sf object, or a list when \code{return = "all"}.
 }
 \description{
-Runs the core count-building workflow: spatially joins points to units,
-counts events by unit, and joins the counts back to the original units.
+Runs the complete spatial count-building workflow:
 }
 \details{
-This function works for administrative areas, custom polygons, and hexbins.
+\enumerate{
+\item assign point events to analytical units with \code{\link[=sj_join]{sj_join()}}
+\item count assigned events with \code{\link[=risk_count_units]{risk_count_units()}}
+\item join counts back to the complete unit population with
+\code{\link[=risk_join_counts]{risk_join_counts()}}
+}
+
+Unmatched events are retained in \code{joined_points} when \code{return = "all"} but
+are not included in unit counts.
 }

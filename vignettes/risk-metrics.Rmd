@@ -13,23 +13,26 @@ library(riskworkflowr)
 
 ## Overview
 
-`riskworkflowr` includes simple helper functions for calculating commonly used spatial risk metrics.
+`riskworkflowr` provides small, composable functions for calculating commonly used risk metrics.
 
-The current metric functions include:
+The current analytical functions include:
 
 ```text
 risk_calc_rate()
-risk_calc_poisson_probability()
+risk_annualise()
+risk_poisson_probability()
 risk_calc_smr()
-risk_calc_location_quotient()
+risk_distinct_category()
 ```
 
-These functions are intended to support transparent and reproducible analytical workflows rather than replace specialist epidemiological or spatial statistical methods.
+These functions are intended to support transparent and reproducible analytical workflows. Each function performs a relatively narrow analytical task so that assumptions and transformations remain explicit.
+
+They are not intended to replace specialist epidemiological or spatial statistical methods where more complex modelling is required.
 
 ## Example data
 
 ```{r}
-data <- data.frame(
+risk_data <- data.frame(
   event_count = c(5, 10, 20),
   population = c(1000, 2000, 3000)
 )
@@ -37,7 +40,7 @@ data <- data.frame(
 
 ## Rates
 
-`risk_calc_rate()` calculates a simple rate:
+`risk_calc_rate()` calculates a simple rate using an observed count and an appropriate denominator:
 
 ```text
 observed events / denominator × multiplier
@@ -45,49 +48,126 @@ observed events / denominator × multiplier
 
 ```{r}
 risk_calc_rate(
-  data = data,
+  data = risk_data,
   count_col = "event_count",
   denominator_col = "population"
 )
 ```
 
+Rates describe event frequency relative to a denominator such as population or exposure. The denominator and multiplier should be selected to suit the analytical question.
+
+## Annualised event frequency
+
+`risk_annualise()` converts an observed event count over a known observation period into an equivalent annual event frequency.
+
+For example, an observed count collected across five years can be expressed as an expected mean annual count:
+
+```{r}
+annual_data <- data.frame(
+  area = c("A", "B", "C"),
+  event_count = c(1, 5, 10),
+  years_observed = c(1, 2, 5)
+)
+
+risk_annualise(
+  data = annual_data,
+  count_col = "event_count",
+  period_col = "years_observed",
+  annualised_col = "lambda_annual"
+)
+```
+
+Annualisation is a temporal standardisation step. It is distinct from calculating a population or exposure rate.
+
 ## Poisson probability
 
-`risk_calc_poisson_probability()` estimates the probability of one or more events occurring over a defined period using an observed event frequency.
+`risk_poisson_probability()` calculates the Poisson probability of observing **at least `k` events**:
+
+\[
+P(X \ge k)
+\]
+
+where:
+
+- \(X\) is the number of events occurring in the target period,
+- \(\lambda\) is the expected mean number of events in that same target period, and
+- `k` is the minimum event count of interest.
+
+The function requires lambda to be supplied explicitly. It does not derive lambda from raw counts or observation periods.
+
+When observed counts cover multiple years, `risk_annualise()` can be used first to create an annual lambda.
 
 ```{r}
 poisson_data <- data.frame(
+  area = c("A", "B", "C"),
   event_count = c(1, 5, 10),
-  years = c(1, 2, 5)
+  years_observed = c(1, 2, 5)
 )
 
-risk_calc_poisson_probability(
-  data = poisson_data,
-  count_col = "event_count",
-  period_col = "years",
-  output = "both"
-)
+poisson_result <- poisson_data |>
+  risk_annualise(
+    count_col = "event_count",
+    period_col = "years_observed",
+    annualised_col = "lambda_annual"
+  ) |>
+  risk_poisson_probability(
+    lambda_col = "lambda_annual",
+    k = 1,
+    probability_col = "prob_ge_1_annual"
+  )
+
+poisson_result
 ```
+
+Because `lambda_annual` represents the expected mean annual event count, `prob_ge_1_annual` represents:
+
+\[
+P(X \ge 1)
+\]
+
+within a one-year period.
+
+A different threshold can be used without changing lambda:
+
+```{r}
+poisson_data |>
+  risk_annualise(
+    count_col = "event_count",
+    period_col = "years_observed",
+    annualised_col = "lambda_annual"
+  ) |>
+  risk_poisson_probability(
+    lambda_col = "lambda_annual",
+    k = 2,
+    probability_col = "prob_ge_2_annual"
+  )
+```
+
+This calculates the probability of observing **two or more events within one year**.
+
+Probabilities are returned as numeric proportions between 0 and 1. Percentage formatting should be applied later in reporting or presentation workflows.
 
 ## Standardised mortality ratio style workflows
 
 `risk_calc_smr()` calculates expected counts and standardised mortality ratio style outputs.
 
-Although named using SMR terminology, the same general structure may be useful for other observed-versus-expected spatial risk workflows where an appropriate denominator is available.
+Although named using SMR terminology, the same general structure may be useful for other observed-versus-expected spatial risk workflows where an appropriate denominator and reference rate are available.
 
 ```{r}
 risk_calc_smr(
-  data = data,
+  data = risk_data,
   observed_col = "event_count",
   denominator_col = "population"
 )
 ```
 
+SMR-style measures compare observed events with the number expected under a reference rate. Interpretation should consider count stability, denominator quality, and the suitability of the reference population.
+
 ## Distinctive category workflows
 
-`risk_distinct_category()` supports grouped/category comparative risk profiling.
+`risk_distinct_category()` supports comparative risk profiling where events are classified into categories within spatial or other analytical units.
 
-It is intended for datasets where events are grouped by both spatial unit and category, such as injury mechanism, incident type, hazard class, or activity type.
+Examples include injury mechanism, incident type, hazard class, activity type, or other event classifications.
 
 ```{r}
 category_data <- data.frame(
@@ -107,54 +187,85 @@ risk_distinct_category(
 )
 ```
 
-The output identifies the highest comparative category for each unit and, optionally, the lowest comparative category.
+The output identifies the strongest comparative category for each unit and, where requested, the weakest comparative category.
 
-This workflow is intended for exploratory spatial risk profiling and should be interpreted carefully where counts are low, denominators are unstable, or categories are inconsistently coded.
+This type of analysis is intended primarily for exploratory risk profiling. Results should be interpreted carefully where counts are low, denominators are unstable, or categories are inconsistently coded.
+
+## Composable analytical workflows
+
+The metric functions are designed to be combined where appropriate rather than treated as a mandatory sequence.
+
+For example:
+
+```text
+observed events
+      |
+      v
+risk_annualise()
+      |
+      v
+expected annual event count (lambda)
+      |
+      v
+risk_poisson_probability()
+      |
+      v
+P(X >= k) for one year
+```
+
+A population-rate analysis may instead use `risk_calc_rate()` directly, while an observed-versus-expected analysis may use `risk_calc_smr()`.
+
+The appropriate sequence depends on the analytical question.
 
 ## Assumptions
 
-Risk metric workflows assume:
+Risk metric workflows assume that:
 
-- event counts are suitable for the intended analysis
-- denominators are appropriate and interpretable
-- spatial units are meaningful for the question being asked
-- low counts and small denominators are interpreted carefully
-- outputs are reviewed alongside context and data quality
+- event counts are suitable for the intended analysis,
+- observation periods are correctly defined,
+- denominators are appropriate and interpretable,
+- spatial or analytical units are meaningful for the question,
+- low counts and small denominators are interpreted carefully, and
+- outputs are reviewed alongside context and data quality.
+
+For Poisson probability calculations, the supplied lambda and event threshold must refer to the same target period.
 
 ## Limitations and pitfalls
 
 Potential limitations include:
 
-- unstable rates in small areas
-- misleading interpretation of rare events
-- denominator uncertainty
-- inconsistent event coding
-- ecological interpretation risks
-- overinterpretation of exploratory outputs
+- unstable rates in small populations or low-exposure areas,
+- misleading interpretation of rare events,
+- denominator uncertainty,
+- inconsistent event coding,
+- inappropriate observation-period definitions,
+- ecological interpretation risks,
+- failure of Poisson assumptions such as equidispersion, and
+- overinterpretation of exploratory outputs.
 
 ## Alternative approaches
 
 Depending on the analytical objective and available data, alternative methods may include:
 
-- direct standardisation
-- indirect standardisation
-- age-sex stratified SMR
-- Bayesian smoothing
-- empirical Bayes methods
-- Poisson or negative binomial regression
-- spatial regression
-- cluster detection methods
-- hierarchical models
+- direct standardisation,
+- indirect standardisation,
+- age-sex stratified SMR,
+- Poisson regression,
+- negative binomial regression,
+- empirical Bayes methods,
+- Bayesian smoothing,
+- spatial regression,
+- cluster detection methods, and
+- hierarchical models.
 
-These methods may be preferable where sufficient covariate information, stable denominators, or specific inferential objectives exist.
+These methods may be preferable where sufficient covariate information, stable denominators, repeated observations, spatial dependence, overdispersion, or specific inferential objectives are present.
 
 ## Future development
 
-Future development priorities include:
+Future development may include:
 
-- grouped/category SMR workflows
-- clearer distinction between SMR and location quotient style calculations
-- category dominance outputs for mapping
-- optional low-count thresholds
-- clearer interpretation flags
-- enhanced examples and visual outputs
+- grouped/category SMR workflows,
+- optional low-count handling,
+- clearer analytical interpretation outputs,
+- additional worked spatial examples, and
+- enhanced reporting and visualisation workflows.

@@ -14,49 +14,29 @@ risk_join_counts(
 )
 }
 \arguments{
-\item{units}{An sf object containing polygon or hexbin units.}
+\item{units}{An sf object containing polygon or hexbin analytical units.}
 
-\item{counts}{A data frame containing counts by unit.}
+\item{counts}{A data frame containing one count row per represented unit.}
 
-\item{unit_id_col}{Name of the shared unit identifier column.}
+\item{unit_id_col}{Name of the shared unique unit identifier column.}
 
-\item{unit_name_col}{Optional shared unit name column.}
+\item{unit_name_col}{Optional unit name column used for consistency QA.}
 
 \item{count_col}{Name of the count column.}
 
-\item{missing_count_value}{Value used to replace missing counts. Use \code{NULL}
-to preserve missing values.}
+\item{missing_count_value}{Value assigned to units absent from \code{counts}.
+Use \code{NULL} to preserve missing values.}
 }
 \value{
-An sf object with counts joined to the input units.
+The original \code{units} sf object with the count column appended.
 }
 \description{
-Joins a count table back to polygon or hexbin units and optionally replaces
-missing count values with a chosen value, usually zero.
+Joins one validated count row per analytical unit back to the complete
+spatial-unit population. Units absent from the count table can be assigned
+a chosen missing-count value, normally zero.
 }
-\examples{
-if (requireNamespace("sf", quietly = TRUE)) {
-  units <- sf::st_sf(
-    unit_id = c("A", "B", "C"),
-    unit_name = c("Area A", "Area B", "Area C"),
-    geometry = sf::st_sfc(
-      sf::st_polygon(list(rbind(c(0, 0), c(1, 0), c(1, 1), c(0, 1), c(0, 0)))),
-      sf::st_polygon(list(rbind(c(1, 0), c(2, 0), c(2, 1), c(1, 1), c(1, 0)))),
-      sf::st_polygon(list(rbind(c(2, 0), c(3, 0), c(3, 1), c(2, 1), c(2, 0))))
-    ),
-    crs = 4326
-  )
-
-  counts <- data.frame(
-    unit_id = c("A", "C"),
-    event_count = c(3, 7)
-  )
-
-  risk_join_counts(
-    units = units,
-    counts = counts,
-    unit_id_col = "unit_id"
-  )
-}
-
+\details{
+The unit identifier is the authoritative join key. When \code{unit_name_col} is
+supplied, names are validated for consistency but are not used as a second
+join key.
 }

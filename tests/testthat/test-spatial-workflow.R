@@ -1,6 +1,6 @@
 # 00001 — Load libraries ----------------------------------------------------
 
-library(sf)
+# library(sf)
 
 # 00002 — Create simple polygon test data -----------------------------------
 

@@ -10,48 +10,48 @@ sj_join(
   id_col,
   name_col = NULL,
   join_mode = c("intersect", "nearest", "intersect_nearest"),
-  repair_polygons = TRUE
+  repair_polygons = TRUE,
+  max_distance_m = NULL
 )
 }
 \arguments{
-\item{points}{An sf point object.}
+\item{points}{An sf POINT object.}
 
-\item{polygons}{An sf polygon object containing target join units.}
+\item{polygons}{An sf POLYGON or MULTIPOLYGON object containing target
+analytical units.}
 
 \item{id_col}{Name of the polygon identifier column to attach to points.}
 
 \item{name_col}{Optional polygon name column to attach to points.}
 
-\item{join_mode}{Spatial join mode. One of \code{"intersect"}, \code{"nearest"},
+\item{join_mode}{Spatial assignment mode. One of \code{"intersect"}, \code{"nearest"},
 or \code{"intersect_nearest"}.}
 
-\item{repair_polygons}{Logical; if TRUE, repair polygon geometry before
+\item{repair_polygons}{Logical; if \code{TRUE}, repair polygon geometry before
 spatial predicates are evaluated.}
+
+\item{max_distance_m}{Optional maximum nearest-assignment distance in metres.
+\code{NULL} permits unrestricted nearest assignment. Points farther than the
+supplied distance remain unmatched.}
 }
 \value{
-An sf object of joined point features with \code{join_method} and
-\code{join_distance_m} columns.
+An sf object containing one row per input point, with polygon
+attributes and spatial-assignment provenance.
 }
 \description{
-Assigns point features to polygon units using intersect, nearest, or
-intersect-nearest logic.
+Assigns point features to polygon units using strict spatial intersection,
+nearest-unit assignment, or intersection with nearest-unit fallback.
 }
 \details{
-This function is intended for reproducible spatial assignment workflows
-supporting areal units, custom polygons, and hexagonal grids.
+The function preserves one output row per input point. Ambiguous
+intersections, where a point intersects more than one polygon, are rejected
+rather than silently duplicating event records.
 
-The output includes \code{join_method} and \code{join_distance_m} fields to support
-auditability of spatial assignment decisions.
-}
-\examples{
-\dontrun{
-joined <- sj_join(
-  points = pts,
-  polygons = polygons,
-  id_col = "lga_code",
-  name_col = "lga_name",
-  join_mode = "intersect_nearest"
-)
-}
+Nearest assignments can optionally be limited using \code{max_distance_m}.
 
+The output includes:
+\itemize{
+\item \code{join_method}: \code{"intersect"}, \code{"nearest"}, or \code{"unmatched"}
+\item \code{join_distance_m}: distance to the assigned or nearest polygon in metres
+}
 }

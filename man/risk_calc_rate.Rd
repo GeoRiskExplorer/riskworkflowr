@@ -18,26 +18,30 @@ risk_calc_rate(
 
 \item{count_col}{Name of the observed count column.}
 
-\item{denominator_col}{Name of the denominator, population, or exposure column.}
+\item{denominator_col}{Name of the denominator, population, or exposure
+column.}
 
 \item{rate_col}{Name of the output rate column.}
 
-\item{multiplier}{Rate multiplier. Defaults are user-controlled, such as
-100, 1,000, 10,000, or 100,000.}
+\item{multiplier}{Positive numeric rate multiplier. For example, \code{100},
+\code{1000}, \code{10000}, or \code{100000}.}
 
-\item{zero_denominator_value}{Value returned when denominator is missing,
-zero, or negative.}
+\item{zero_denominator_value}{Numeric value returned when the denominator is
+missing or zero. Defaults to \code{NA_real_}.}
 }
 \value{
-Input data with an added rate column.
+The input data with an added rate column.
 }
 \description{
-Calculates a simple event rate using an observed count column and denominator
-column, with a user-defined multiplier.
+Calculates an event rate from an observed count and a denominator, using a
+user-defined multiplier.
 }
 \details{
 For example, with \code{multiplier = 10000}, the function calculates events per
 10,000 population or exposure units.
+
+Missing or zero denominators return \code{zero_denominator_value}. Negative
+denominators are treated as invalid input.
 }
 \examples{
 data <- data.frame(

@@ -21,34 +21,7 @@ test_that("risk_calc_rate calculates rates correctly", {
 
 })
 
-# 00002 — risk_calc_poisson_probability() ----------------------------------
 
-test_that("risk_calc_poisson_probability calculates probability fields", {
-
-  x <- data.frame(
-    event_count = c(0, 1, 5),
-    years = c(1, 1, 5)
-  )
-
-  result <- risk_calc_poisson_probability(
-    data = x,
-    count_col = "event_count",
-    period_col = "years",
-    output = "both"
-  )
-
-  expect_true("lambda" %in% names(result))
-  expect_true("prob_event_ge_1" %in% names(result))
-  expect_true("prob_event_ge_1_pct" %in% names(result))
-
-  expect_equal(result$lambda[1], 0)
-  expect_equal(result$lambda[2], 1)
-  expect_equal(result$lambda[3], 1)
-
-  expect_equal(result$prob_event_ge_1[1], 0)
-  expect_equal(result$prob_event_ge_1_pct[1], 0)
-
-})
 
 # 00003 — risk_calc_smr() ---------------------------------------------------
 

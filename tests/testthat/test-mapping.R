@@ -1,6 +1,7 @@
 # 00001 — Load libraries ----------------------------------------------------
 
-library(sf)
+# library(sf)
+testthat::skip_if_not_installed("sf")
 
 # 00002 — Create simple polygon test data -----------------------------------
 

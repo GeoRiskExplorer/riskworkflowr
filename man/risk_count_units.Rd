@@ -2,7 +2,7 @@
 % Please edit documentation in R/risk_count_units.R
 \name{risk_count_units}
 \alias{risk_count_units}
-\title{Count events within spatial units}
+\title{Count event records by analytical unit}
 \usage{
 risk_count_units(
   data,
@@ -13,11 +13,11 @@ risk_count_units(
 )
 }
 \arguments{
-\item{data}{A data frame or sf object containing joined event records.}
+\item{data}{A data frame or sf object containing assigned event records.}
 
 \item{unit_id_col}{Name of the unit identifier column.}
 
-\item{unit_name_col}{Optional name of the unit name column.}
+\item{unit_name_col}{Optional unit name column.}
 
 \item{count_col}{Name of the output count column.}
 
@@ -25,24 +25,16 @@ risk_count_units(
 dropped before counting.}
 }
 \value{
-A data frame containing event counts by unit.
+A data frame containing one row per represented analytical unit.
 }
 \description{
-Aggregates assigned event records by polygon, hexbin, or other spatial unit.
+Counts records that have already been assigned to an analytical unit.
+Records with a missing unit identifier are treated as unmatched and are
+excluded from the count table.
 }
 \details{
-This function is intended for risk analysis workflows where events have
-already been assigned to administrative areas, statistical regions, sites,
-or grid systems using a spatial join workflow such as \code{\link[=sj_join]{sj_join()}}.
-}
-\examples{
-data <- data.frame(
-  unit_id = c("A", "A", "B", "C", "C", "C")
-)
-
-risk_count_units(
-  data = data,
-  unit_id_col = "unit_id"
-)
-
+This function does not perform spatial assignment and does not create
+zero-event units. Use \code{\link[=sj_join]{sj_join()}} before this function and
+\code{\link[=risk_join_counts]{risk_join_counts()}} afterwards when a complete spatial-unit population is
+required.
 }

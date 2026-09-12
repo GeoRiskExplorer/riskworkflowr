@@ -21,34 +21,39 @@ risk_distinct_category(
 )
 }
 \arguments{
-\item{data}{A data frame containing unit, category, count, and denominator columns.}
+\item{data}{A data frame or sf object containing one row per
+unit-category combination.}
 
 \item{unit_id_col}{Name of the spatial unit identifier column.}
 
 \item{category_col}{Name of the category/group column.}
 
-\item{observed_col}{Name of the observed count column. Defaults to \code{"event_count"}.}
+\item{observed_col}{Name of the observed count column. Defaults to
+\code{"event_count"}.}
 
 \item{denominator_col}{Name of the denominator/exposure column.}
 
-\item{min_count}{Minimum observed count required for a category to be considered.}
+\item{min_count}{Minimum observed count required for a category to be
+considered. Must be one non-negative whole number.}
 
-\item{include_lowest}{Logical. If TRUE, also returns the lowest eligible category.}
+\item{include_lowest}{Logical. If TRUE, also returns the lowest eligible
+category.}
 
 \item{highest_category_col}{Output column for highest category.}
 
-\item{highest_smr_col}{Output column for highest SMR.}
+\item{highest_smr_col}{Output column for highest comparative SMR.}
 
 \item{highest_count_col}{Output column for highest category count.}
 
 \item{lowest_category_col}{Output column for lowest category.}
 
-\item{lowest_smr_col}{Output column for lowest SMR.}
+\item{lowest_smr_col}{Output column for lowest comparative SMR.}
 
 \item{lowest_count_col}{Output column for lowest category count.}
 }
 \value{
-A data frame with one row per unit and distinctive category outputs.
+A non-spatial data frame with one row per unit and distinctive
+category outputs.
 
 The \code{insufficient_count_flag} column is \code{TRUE} where no category within
 a unit met the minimum count threshold set by \code{min_count}.
@@ -58,9 +63,31 @@ Calculates category-specific comparative SMR-style values and identifies
 the highest and optionally lowest distinctive category for each unit.
 }
 \details{
-This function is intended for exploratory grouped/category comparative
-risk profiling. It identifies categories with the highest relative
-observed-versus-expected value within each spatial unit.
+The input must contain one row per unit-category combination. Duplicate
+unit-category rows are rejected because summing denominators across
+duplicated rows can distort category-specific reference rates.
+
+For each category, a reference rate is calculated across all units as:
+
+\deqn{reference\ rate_c = \frac{\sum observed_c}{\sum denominator_c}}
+
+The expected count for each unit-category row is:
+
+\deqn{expected_{uc} = denominator_{uc} \times reference\ rate_c}
+
+and the comparative SMR-style value is:
+
+\deqn{SMR_{uc} = \frac{observed_{uc}}{expected_{uc}}}
+
+Categories are eligible for ranking when the comparative SMR is defined
+and observed count is at least \code{min_count}.
+
+Ties are resolved deterministically by:
+\enumerate{
+\item comparative SMR,
+\item observed count,
+\item category label.
+}
 
 Results should be interpreted carefully where counts are low,
 denominators are unstable, or categories are inconsistently coded.
@@ -83,6 +110,6 @@ risk_distinct_category(
 }
 \references{
 Boscoe, F. P., & Pradhan, E. (2015). The Most Distinctive Causes
-of Death by State, 2001–2010. Preventing Chronic Disease, 12, E75.
+of Death by State, 2001-2010. Preventing Chronic Disease, 12, E75.
 https://doi.org/10.5888/pcd12.140395
 }

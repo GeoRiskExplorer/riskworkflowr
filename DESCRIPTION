@@ -14,8 +14,7 @@ Imports:
     dplyr,
     ggplot2,
     sf,
-    stats,
-    tools
+    stats
 Suggests:
     testthat (>= 3.0.0),
     knitr,
@@ -23,7 +22,7 @@ Suggests:
     rmarkdown
 Config/testthat/edition: 3
 Depends: 
-    R (>= 3.5)
+        R (>= 4.1.0)
 LazyData: true
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 VignetteBuilder: knitr

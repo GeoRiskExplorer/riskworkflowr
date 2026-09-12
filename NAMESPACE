@@ -2,11 +2,12 @@
 
 export(geom_repair)
 export(map_risk_choropleth)
+export(risk_annualise)
 export(risk_build_counts)
-export(risk_calc_poisson_probability)
 export(risk_calc_rate)
 export(risk_calc_smr)
 export(risk_count_units)
 export(risk_distinct_category)
 export(risk_join_counts)
+export(risk_poisson_probability)
 export(sj_join)

@@ -4,28 +4,50 @@
 \alias{geom_repair}
 \title{Repair invalid geometry for spatial processing}
 \usage{
-geom_repair(x, quiet = FALSE)
+geom_repair(x, quiet = TRUE)
 }
 \arguments{
-\item{x}{An sf object.}
+\item{x}{An \code{sf} object.}
 
-\item{quiet}{Logical; if TRUE, suppress repair summary messages.}
+\item{quiet}{Logical. If \code{TRUE} (default), suppress repair summary messages.}
 }
 \value{
-An sf object with repaired geometry.
+An \code{sf} object with repaired geometry.
+
+A \code{geom_repair_summary} attribute is attached containing:
+\itemize{
+\item \code{n_features}
+\item \code{n_invalid_before}
+\item \code{n_unknown_before}
+\item \code{n_invalid_after}
+\item \code{n_unknown_after}
+}
 }
 \description{
-Repairs invalid geometries using \code{sf::st_make_valid()} so downstream
-spatial predicates and joins behave more reliably.
+Repairs invalid geometries using \code{\link[sf:st_make_valid]{sf::st_make_valid()}} so downstream
+spatial predicates, joins, and analytical workflows behave more reliably.
 }
 \details{
-This function is intended to support reliable spatial operations across
-sf, GEOS, DuckDB, and ArcGIS-derived workflows where geometry validity may
-affect processing.
+Geometry validity is assessed with \code{\link[sf:st_is_valid]{sf::st_is_valid()}}.
+
+If any geometry is invalid or has indeterminate validity, the geometry
+column is passed to \code{\link[sf:st_make_valid]{sf::st_make_valid()}}.
+
+\code{st_make_valid()} may legitimately change geometry type where required to
+produce valid geometry, for example from \code{POLYGON} to \code{MULTIPOLYGON}.
+Attributes, row count, active geometry column, and CRS are preserved.
+
+Empty geometries are not automatically considered errors; their treatment
+follows \code{sf} validity semantics.
 }
 \examples{
 \dontrun{
 repaired_sf <- geom_repair(my_sf)
+
+attr(
+  repaired_sf,
+  "geom_repair_summary"
+)
 }
 
 }

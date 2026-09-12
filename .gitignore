@@ -18,6 +18,7 @@ outputs/
 # Package build artifacts
 inst/doc
 /doc/
+/docs/
 /Meta/
 
 # Local/private config
@@ -32,3 +33,4 @@ config/project_paths.yml
 
 # data-raw temporary geodatabases
 data-raw/gdb/*.gdb/
+/workflow/
