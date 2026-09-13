@@ -14,12 +14,14 @@ Imports:
     dplyr,
     ggplot2,
     sf,
-    stats
+    stats,
+    tidyr
 Suggests:
     testthat (>= 3.0.0),
     knitr,
     RColorBrewer,
-    rmarkdown
+    rmarkdown,
+    gt
 Config/testthat/edition: 3
 Depends: 
         R (>= 4.1.0)
